@@ -1,16 +1,29 @@
-# This is a sample Python script.
+import requests
+import json
+import datetime
+import hashlib
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+t = datetime.datetime.utcnow()
+timestamp = "{}{:02d}{:02d}{:02d}{:02d}{:02d}".format(t.year, t.month, t.day, t.hour, t.minute, t.second)
+
+api = "https://api.smitegame.com/smiteapi.svc/"
+devid = "4187"
+authkey = "EF4EA7FDE91144CAABABE5AE71129907"
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def signature(method):
+    return hashlib.md5((devid + method + authkey + timestamp).encode()).hexdigest()
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+createsessionstring = api + "createsessionJson/" + devid + "/" + signature("createsession") + "/" + timestamp
+sessionid = requests.get(createsessionstring).json()["session_id"]
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+def call(params):
+    callstring = api + params[0] + "Json/" + devid + "/" + signature(params[0]) + "/" + sessionid + "/" + timestamp
+    for param in params:
+        callstring = callstring + "/" + param
+    return callstring
+
+
+print(sessionid)
