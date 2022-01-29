@@ -2,7 +2,7 @@ from flask import Flask
 
 application = Flask(__name__)
 
-@application.route("/")
-    def hello():
-        return "Hello"
+@application.route("/<name>")
+def index(name):
+    return "<h1>index {}</h1>".format(name)
 
