@@ -12,18 +12,25 @@ authkey = "EF4EA7FDE91144CAABABE5AE71129907"
 
 
 def signature(method):
-    return hashlib.md5((devid + method + authkey + timestamp).encode()).hexdigest()
+    return hashlib.md5((devid + method + authkey + timestamp).encode()).hexdigest().lower()
 
 
-createsessionstring = api + "createsessionJson/" + devid + "/" + signature("createsession") + "/" + timestamp
-sessionid = requests.get(createsessionstring).json()["session_id"]
+createsessionstring = api + "createsessionjson/" + devid + "/" + signature("createsession") + "/" + timestamp
+# sessionid = requests.get(createsessionstring).json()["session_id"]
+sessionid = "EE1DC8B7CC6B430BBEC5D7F8D195DC9B"
+print("sessionid: " + sessionid)
 
 
 def call(params):
-    callstring = api + params[0] + "Json/" + devid + "/" + signature(params[0]) + "/" + sessionid + "/" + timestamp
-    for param in params:
+    callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" + sessionid + "/" + timestamp
+    for param in params[1:]:
         callstring = callstring + "/" + param
     return callstring
 
 
-print(sessionid)
+testresult = requests.get(call(["testsession"]))
+# sample = "https://api.smitegame.com/smiteapi.svc/testsessionjson/1004/0abd990b4ca9f86817e087ad684515db" \
+#          "/83B082E576584DA8B1DB073DECA9E819/20120927193800/HirezPlayer "
+# print(sample)
+# print("")
+print(testresult.json())
