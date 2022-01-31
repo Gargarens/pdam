@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Puff Daddy Continental</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
 </head>
 <body>
-
+    <br>
+    <form action="player" method="post">
+        {% for message in get_flashed_messages()%}
+            <p> {{message}} </p>
+        {% endfor %}
+        <br>
+        <input type="text" name="name_input">
+        <br>
+        <input type="submit" value="PLAYER" id ="player">
+    </form>
 </body>
 </html>
