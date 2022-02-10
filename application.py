@@ -39,3 +39,14 @@ def check():
     flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
     return render_template("check.html")
 
+@application.route("/gods", methods=["POST", "GET"])
+def gods():
+    global time_since_start
+    global session_id
+    global session_start_time
+    time_since_start = apihandler.datetimenow() - session_start_time
+    flash("Session ID: " + str(session_id))
+    flash("Session start time: " + str(session_start_time))
+    flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
+    gods_call_string = apihandler.callString(["getgods", "1"])
+    return render_template("gods.html")

@@ -25,17 +25,18 @@ def getSessionID():
     createsessionstring = api + "createsessionjson/" + devid + "/" + signature("createsession") + "/" + ts
     return requests.get(createsessionstring).json()["session_id"], ts, time
 
-# createsessionstring = api + "createsessionjson/" + devid + "/" + signature("createsession") + "/" + timestamp
-# sessionid = requests.get(createsessionstring).json()["session_id"]
-# sessionid = "EE1DC8B7CC6B430BBEC5D7F8D195DC9B"
-# print("sessionid: " + sessionid)
 
-
-def call(params, sessionid):
-    callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" + sessionid + "/" + timestamp(datetimenow())
+def callString(params, sessionid):
+    callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" \
+                 + sessionid + "/" + timestamp(datetimenow()) + "/" + params[1]
     for param in params[1:]:
         callstring = callstring + "/" + param
     return callstring
+
+
+def requestFromAPI(url):
+    result = requests.get(url).json()
+    return result
 
 
 # testresult = requests.get(call(["testsession"]))
