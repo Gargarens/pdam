@@ -44,10 +44,17 @@ def check():
     global session_id
     global session_start_time
     time_since_start = apihandler.datetimenow() - session_start_time
-    flash("Session ID: " + str(session_id))
-    flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
-    datausedcheck = apihandler.checkdatause(session_id)
-    flash(datausedcheck)
+    datausedcheck = apihandler.checkdatause(session_id)[0]
+
+    requestsLeft = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
+    flash("Requests left: " + str(requestsLeft))
+
+    activeSessions = datausedcheck['Active_Sessions']
+    flash("Active sessions: " + str(activeSessions))
+
+    sessionsLeft = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
+    flash("Sessions left: " + str(sessionsLeft))
+
     return render_template("check.html")
 
 
