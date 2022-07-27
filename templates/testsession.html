@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Puff Daddy Continental</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+</head>
+<body>
+    <img src="/static/pdclogo.png">
+    <br>
+    <form action="check" method="post">
+        <p> {{get_flashed_messages()[0]}} </p>
+        <p> {{get_flashed_messages()[1]}} </p>
+        <br>
+<!--        <input type="text" name="name_input">-->
+        <br>
+        <input type="submit" value="CHECK" id ="check">
+    </form>
+    <form action="gods" method="post">
+        <input type="submit" value="GODS" id="gods">
+    </form>
+    <form action="testsession" method="post">
+        <input type="submit" value="TEST" id="test">
+    </form>
+</body>
+</html>

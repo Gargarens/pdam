@@ -23,14 +23,19 @@ def getSessionID():
     time = datetimenow()
     ts = timestamp(time)
     createsessionstring = api + "createsessionjson/" + devid + "/" + signature("createsession") + "/" + ts
-    return requests.get(createsessionstring).json()["session_id"], ts, time
+    sessionid = requests.get(createsessionstring).json()["session_id"]
+    print("SESSION ID:\n" + sessionid)
+    return sessionid, ts, time
 
 
 def callString(params, sessionid):
+    # params is list with method name (i.e. "createsession") as first element
+    # and any possible parameters after {timestamp} as next elements
     callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" \
-                 + sessionid + "/" + timestamp(datetimenow()) + "/" + params[1]
+                 + sessionid + "/" + timestamp(datetimenow())
     for param in params[1:]:
         callstring = callstring + "/" + param
+    print("CALLSTRING (" + params[0] + "):\n" + callstring)
     return callstring
 
 
@@ -39,9 +44,44 @@ def requestFromAPI(url):
     return result
 
 
-# testresult = requests.get(call(["testsession"]))
-# sample = "https://api.smitegame.com/smiteapi.svc/testsessionjson/1004/0abd990b4ca9f86817e087ad684515db" \
-#          "/83B082E576584DA8B1DB073DECA9E819/20120927193800/HirezPlayer "
-# print(sample)
-# print("")
-# print(testresult.json())
+def testSession(sessionid):
+    # testsessionstring = api + "testsessionjson" + "/" + devid + "/" + signature("testsession") + "/" + sessionid + "/" + timestamp(datetimenow())
+    testsessionstring = callString(["testsession"], sessionid)
+    return requestFromAPI(testsessionstring)
+
+
+def checkdatause(sessionid):
+    checkstring = callString(["getdataused"], sessionid)
+    return requestFromAPI(checkstring)
+
+
+# sid: "FC98E1437D5845BDA1FF4F5BC1F6F07B" 16:08
+
+# QUEUE ID
+# 426   conquest
+# 435 arena
+# 448 joust
+# 445 assault
+# 466 clash
+# 10195 under 30 arena
+# 451 conquest ranked
+# 434 motd
+# 10193 under 30 conquest
+# 10197 under 30 joust
+# 459 siege
+# 450 joust ranked
+# 10189 slash
+# 440 duel ranked
+
+queue = "435"
+date = "20220209"
+hour = "20"
+# getmatchidsbyqueue
+# getSessionID()
+# callString(["getmatchidsbyqueue", queue, date, hour], "FC98E1437D5845BDA1FF4F5BC1F6F07B")
+
+# getmatchdetails
+callString(["getmatchdetails", "1223995565"], "FC98E1437D5845BDA1FF4F5BC1F6F07B")
+
+# getmatchdetailsbatch
+# callString(["getmatchdetailsbatch", ], FC98E1437D5845BDA1FF4F5BC1F6F07B)

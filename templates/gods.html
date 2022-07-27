@@ -9,13 +9,13 @@
     <img src="/static/pdclogo.png">
     <br>
     <form action="check" method="post">
+        <input type="submit" value="CHECK" id ="check">
         {% for msg in get_flashed_messages(): %}
         <p> {{ msg }} </p>
         {% endfor %}
         <br>
 <!--        <input type="text" name="name_input">-->
         <br>
-        <input type="submit" value="CHECK" id ="check">
     </form>
 </body>
 </html>
