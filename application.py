@@ -34,9 +34,10 @@ def start():
 def arena():
     global session_id
     playername = "creviceguy"
-    date = "20220727"
+    date = "20220427"
     hour = "20"
-    arenadata = apihandler.getmatchidsbyqueue(10189, date, hour, session_id)
+    arenadata = apihandler.getmatchidsbyqueue(435, date, hour, session_id)
+    print("Matches for " + date + ", hour " + hour + ":")
     print(arenadata)
     return render_template("arena.html")
 
@@ -47,7 +48,16 @@ def player():
     playername = "creviceguy"
     playerdata = apihandler.getplayer(playername, session_id)[0]
     playerid = playerdata["Id"]
-    print(apihandler.getmatchhistory(playerid, session_id))
+    matchhistory = apihandler.getmatchhistory(playerid, session_id)
+    arenamatches = []
+    under30arenamatches = []
+    for match in matchhistory:
+        if match["Match_Queue_Id"] == 435:
+            arenamatches.append(match)
+        elif match["Match_Queue_Id"] == 10195:
+            under30arenamatches.append(match)
+
+    print("Found " + str(len(arenamatches)) + " arena matches and " + str(len(under30arenamatches)) + " under30arena matches for " + playername + ".")
     return render_template("player.html")
 
 

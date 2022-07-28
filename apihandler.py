@@ -45,7 +45,6 @@ def requestFromAPI(url):
 
 
 def testSession(sessionid):
-    # testsessionstring = api + "testsessionjson" + "/" + devid + "/" + signature("testsession") + "/" + sessionid + "/" + timestamp(datetimenow())
     testsessionstring = callString(["testsession"], sessionid)
     return requestFromAPI(testsessionstring)
 
