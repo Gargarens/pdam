@@ -36,7 +36,7 @@ def arena():
     playername = "creviceguy"
     date = "20220727"
     hour = "20"
-    arenadata = apihandler.getmatchidsbyqueue(10189, date, hour)
+    arenadata = apihandler.getmatchidsbyqueue(10189, date, hour, session_id)
     print(arenadata)
     return render_template("arena.html")
 
