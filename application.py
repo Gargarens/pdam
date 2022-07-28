@@ -29,12 +29,16 @@ def start():
     # flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
     return render_template("start.html")
 
+
 @application.route("/player", methods=["POST", "GET"])
 def player():
     global session_id
     playername = "creviceguy"
-    playerdata = apihandler.getplayer(session_id, playername)[0]
+    playerdata = apihandler.getplayer(playername, session_id)[0]
+    playerid = playerdata["Id"]
+    print(apihandler.getmatchhistory(playerid, session_id))
     return render_template("player.html")
+
 
 @application.route("/testsession", methods=["POST", "GET"])
 def testsession():

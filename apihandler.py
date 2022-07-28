@@ -55,8 +55,12 @@ def checkdatause(sessionid):
     return requestFromAPI(checkstring)
 
 
-def getplayer(sessionid, player):
+def getplayer(player, sessionid):
     return requestFromAPI(callString(["getplayer", player], sessionid))
+
+
+def getmatchhistory(playerid, sessionid):
+    return requestFromAPI(callString(["getmatchhistory", str(playerid)], sessionid))
 
 
 # sid: "FC98E1437D5845BDA1FF4F5BC1F6F07B" 16:08
