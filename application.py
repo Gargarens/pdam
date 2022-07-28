@@ -34,7 +34,9 @@ def start():
 def arena():
     global session_id
     playername = "creviceguy"
-    arenadata = apihandler.getmatchidsbyqueue(435)
+    date = "20220727"
+    hour = "20"
+    arenadata = apihandler.getmatchidsbyqueue(10189, date, hour)
     print(arenadata)
     return render_template("arena.html")
 
