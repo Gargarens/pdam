@@ -55,6 +55,10 @@ def checkdatause(sessionid):
     return requestFromAPI(checkstring)
 
 
+def getplayer(sessionid, player):
+    return requestFromAPI(callString(["getplayer", player], sessionid))
+
+
 # sid: "FC98E1437D5845BDA1FF4F5BC1F6F07B" 16:08
 
 # QUEUE ID
