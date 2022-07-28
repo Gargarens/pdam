@@ -19,14 +19,14 @@ def index():
 
 @application.route("/start", methods=["POST", "GET"])
 def start():
-    global time_since_start
     global session_id
+    global time_since_start
     global session_start_time
     session_id, session_start_timestamp, session_start_time = apihandler.getSessionID()
-    time_since_start = apihandler.datetimenow() - session_start_time
-    flash("Session ID: " + str(session_id))
-    flash("Session start time: " + str(session_start_time))
-    flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
+    # time_since_start = apihandler.datetimenow() - session_start_time
+    # flash("Session ID: " + str(session_id))
+    # flash("Session start time: " + str(session_start_time))
+    # flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
     return render_template("start.html")
 
 @application.route("/testsession", methods=["POST", "GET"])
@@ -60,13 +60,7 @@ def check():
 
 @application.route("/gods", methods=["POST", "GET"])
 def gods():
-    global time_since_start
     global session_id
-    global session_start_time
-    time_since_start = apihandler.datetimenow() - session_start_time
-    flash("Session ID: " + str(session_id))
-    flash("Session start time: " + str(session_start_time))
-    flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
     gods_call_string = apihandler.callString(["getgods", "1"], session_id)
     god_data = apihandler.requestFromAPI(gods_call_string)
     assassins = list()
@@ -76,12 +70,21 @@ def gods():
     warriors = list()
     roles = [assassins, guardians, hunters, mages, warriors]
     for god in god_data:
-        for role in roles:
-            if god["Roles"] == role:
-                role.append(god["Name"])
-                break
+        role = (god["Roles"].lower())
+        if role == "assassin":
+            roles[0].append(god)
+        elif role == "guardian":
+            roles[1].append(god)
+        elif role == "hunter":
+            roles[2].append(god)
+        elif role == "mage":
+            roles[3].append(god)
+        elif role == "warrior":
+            roles[4].append(god)
+        else:
+            print("Role parsing error for " + god["Name"])
     for role in roles:
-        flash(role)
+        flash("ROLE")
         for god in role:
-            flash(god)
+            flash(god["Name"])
     return render_template("gods.html")

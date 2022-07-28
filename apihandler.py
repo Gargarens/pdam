@@ -35,7 +35,7 @@ def callString(params, sessionid):
                  + sessionid + "/" + timestamp(datetimenow())
     for param in params[1:]:
         callstring = callstring + "/" + param
-    #print("CALLSTRING (" + params[0] + "):\n" + callstring)
+    print("CALLSTRING (" + params[0] + "):\n" + callstring)
     return callstring
 
 
