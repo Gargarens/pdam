@@ -30,6 +30,15 @@ def start():
     return render_template("start.html")
 
 
+@application.route("/arena", methods=["POST", "GET"])
+def arena():
+    global session_id
+    playername = "creviceguy"
+    arenadata = apihandler.getmatchidsbyqueue(435)
+    print("Number of matches returned: " )
+    print("Example:\n"  )
+
+
 @application.route("/player", methods=["POST", "GET"])
 def player():
     global session_id

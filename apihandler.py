@@ -63,33 +63,22 @@ def getmatchhistory(playerid, sessionid):
     return requestFromAPI(callString(["getmatchhistory", str(playerid)], sessionid))
 
 
-# sid: "FC98E1437D5845BDA1FF4F5BC1F6F07B" 16:08
-
-# QUEUE ID
-# 426   conquest
-# 435 arena
-# 448 joust
-# 445 assault
-# 466 clash
-# 10195 under 30 arena
-# 451 conquest ranked
-# 434 motd
-# 10193 under 30 conquest
-# 10197 under 30 joust
-# 459 siege
-# 450 joust ranked
-# 10189 slash
-# 440 duel ranked
-
-queue = "435"
-date = "20220209"
-hour = "20"
-# getmatchidsbyqueue
-# getSessionID()
-# callString(["getmatchidsbyqueue", queue, date, hour], "FC98E1437D5845BDA1FF4F5BC1F6F07B")
-
-# getmatchdetails
-callString(["getmatchdetails", "1223995565"], "FC98E1437D5845BDA1FF4F5BC1F6F07B")
-
-# getmatchdetailsbatch
-# callString(["getmatchdetailsbatch", ], FC98E1437D5845BDA1FF4F5BC1F6F07B)
+def getmatchidsbyqueue(queue, date, hour, sessionid):
+    return requestFromAPI(callString(["getmatchidsbyqueue", str(queue), date, hour], sessionid))
+    # Date format: 20171231
+    # hour = 0...23 or by each 10min like so: "3,00" or "3,50"
+    # QUEUE ID
+    # 426   conquest
+    # 435   arena
+    # 448   joust
+    # 445   assault
+    # 466   clash
+    # 10195 under 30 arena
+    # 451   conquest ranked
+    # 434   motd
+    # 10193 under 30 conquest
+    # 10197 under 30 joust
+    # 459   siege
+    # 450   joust ranked
+    # 10189 slash
+    # 440   duel ranked
