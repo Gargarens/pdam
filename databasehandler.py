@@ -54,6 +54,15 @@ def checksqliteversion():
     return res
 
 
+def getplayerid(playername):
+    connection = sqlite3.connect(db)
+    cursor = connection.cursor()
+    cursor.execute("SELECT player_id FROM players WHERE name='" + playername + "'")
+    playerid = str(cursor.fetchall()[0][0])
+    connection.close()
+    return playerid
+
+
 
 
 

@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, flash
 application = Flask(__name__)
 application.secret_key = "cockandballs"
 time_since_start = 0
-session_id = 0
+sessionid = 0
 session_start_time = datetime.datetime.utcnow()
 
 
@@ -29,10 +29,10 @@ def createtables():
 
 @application.route("/start", methods=["POST", "GET"])
 def start():
-    global session_id
+    global sessionid
     global time_since_start
     global session_start_time
-    session_id, session_start_timestamp, session_start_time = getSessionID()
+    sessionid, session_start_timestamp, session_start_time = getSessionID()
     # time_since_start = apihandler.datetimenow() - session_start_time
     # flash("Session ID: " + str(session_id))
     # flash("Session start time: " + str(session_start_time))
@@ -42,7 +42,7 @@ def start():
 
 @application.route("/arena", methods=["POST", "GET"])
 def arena():
-    global session_id
+    global sessionid
     playername = "creviceguy"
     date = "20220427"
     hour = "20"
@@ -54,11 +54,11 @@ def arena():
 
 @application.route("/player", methods=["POST", "GET"])
 def player():
-    global session_id
+    global sessionid
     playername = "BigGirl2003"
-    playerdata = getplayer(playername, session_id)[0]
+    playerdata = getplayer(playername, sessionid)[0]
     playerid = playerdata["Id"]
-    matchhistory = getmatchhistory(playerid, session_id)
+    matchhistory = getmatchhistory(playerid, sessionid)
     arenamatches = []
     under30arenamatches = []
     for match in matchhistory:
@@ -74,10 +74,10 @@ def player():
 @application.route("/check", methods=["POST", "GET"])
 def check():
     global time_since_start
-    global session_id
+    global sessionid
     global session_start_time
     time_since_start = datetimenow() - session_start_time
-    datausedcheck = checkdatause(session_id)[0]
+    datausedcheck = checkdatause(sessionid)[0]
 
     requestsLeft = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
     flash("Requests left: " + str(requestsLeft))
@@ -93,8 +93,8 @@ def check():
 
 @application.route("/gods", methods=["POST", "GET"])
 def gods():
-    global session_id
-    god_data = getgods(session_id)
+    global sessionid
+    god_data = getgods(sessionid)
     dbdata = []
     for god in god_data:
         dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
@@ -105,5 +105,9 @@ def gods():
 
 @application.route("/update", methods=["POST", "GET"])
 def update():
-    global session_id
-    recent = getmatchhistory()
+    global sessionid
+    playername = "Spuik"
+    playerid = getplayerid(playername)
+    recent = getmatchhistory(playerid, sessionid)
+    print(recent[0])
+    return render_template("update.html")
