@@ -1,6 +1,6 @@
 import datetime
-import databasehandler
-import apihandler
+from databasehandler import *
+from apihandler import *
 from flask import Flask, render_template, request, flash
 
 application = Flask(__name__)
@@ -18,12 +18,12 @@ def index():
 
 @application.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    players = databasehandler.getplayers()
+    players = getplayers()
     columns = ["god", "conquest", "arena", "joust", "assault", "under30arena", "conquestranked", "under30conquest",
                  "under30joust", "joustranked", "slash", "duelranked"]
     for player in players:
         name = player[1]
-        databasehandler.createtable(name, columns)
+        createtable(name, columns)
     return render_template("createtables.html")
 
 
@@ -32,7 +32,7 @@ def start():
     global session_id
     global time_since_start
     global session_start_time
-    session_id, session_start_timestamp, session_start_time = apihandler.getSessionID()
+    session_id, session_start_timestamp, session_start_time = getSessionID()
     # time_since_start = apihandler.datetimenow() - session_start_time
     # flash("Session ID: " + str(session_id))
     # flash("Session start time: " + str(session_start_time))
@@ -56,9 +56,9 @@ def arena():
 def player():
     global session_id
     playername = "BigGirl2003"
-    playerdata = apihandler.getplayer(playername, session_id)[0]
+    playerdata = getplayer(playername, session_id)[0]
     playerid = playerdata["Id"]
-    matchhistory = apihandler.getmatchhistory(playerid, session_id)
+    matchhistory = getmatchhistory(playerid, session_id)
     arenamatches = []
     under30arenamatches = []
     for match in matchhistory:
@@ -71,22 +71,13 @@ def player():
     return render_template("player.html")
 
 
-@application.route("/testsession", methods=["POST", "GET"])
-def testsession():
-    global session_id
-    testsessionstring = apihandler.testSession(session_id)
-    result = apihandler.requestFromAPI(testsessionstring)
-    flash(result)
-    return render_template("testsession.html")
-
-
 @application.route("/check", methods=["POST", "GET"])
 def check():
     global time_since_start
     global session_id
     global session_start_time
-    time_since_start = apihandler.datetimenow() - session_start_time
-    datausedcheck = apihandler.checkdatause(session_id)[0]
+    time_since_start = datetimenow() - session_start_time
+    datausedcheck = checkdatause(session_id)[0]
 
     requestsLeft = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
     flash("Requests left: " + str(requestsLeft))
@@ -97,8 +88,8 @@ def check():
     sessionsLeft = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
     flash("Sessions left: " + str(sessionsLeft))
 
-    #databasehandler.createtable("gods (name, role, pantheon)")
-    databasehandler.testtable("gods")
+    # databasehandler.createtable("gods (name, role, pantheon)")
+    # databasehandler.testtable("gods")
 
     return render_template("check.html")
 
@@ -106,20 +97,17 @@ def check():
 @application.route("/gods", methods=["POST", "GET"])
 def gods():
     global session_id
-    gods_call_string = apihandler.callString(["getgods", "1"], session_id)
-    god_data = apihandler.requestFromAPI(gods_call_string)
+    # gods_call_string = apihandler.callString(["getgods", "1"], session_id)
+    # god_data = apihandler.requestFromAPI(gods_call_string)
+    god_data = getgods(session_id)
     dbdata = []
-    assassins = list()
-    guardians = list()
-    hunters = list()
-    mages = list()
-    warriors = list()
-    roles = [assassins, guardians, hunters, mages, warriors]
     for god in god_data:
         dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
-    databasehandler.insertintotable(dbdata, "gods")
-    # for role in roles:
-    #     flash("ROLE")
-    #     for god in role:
-    #         flash(god["Name"])
+    insertintotable(dbdata, "gods")
+
     return render_template("gods.html")
+
+
+@application.route("/update", methods=["POST", "GET"])
+def update():
+    global session_id

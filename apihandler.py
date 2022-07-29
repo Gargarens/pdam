@@ -28,7 +28,7 @@ def getSessionID():
     return sessionid, ts, time
 
 
-def callString(params, sessionid):
+def __callString(params, sessionid):
     # params is list with method name (i.e. "createsession") as first element
     # and any possible parameters after {timestamp} as next elements
     callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" \
@@ -39,31 +39,30 @@ def callString(params, sessionid):
     return callstring
 
 
-def requestFromAPI(url):
+def __requestFromAPI(url):
     result = requests.get(url).json()
     return result
 
 
-def testSession(sessionid):
-    testsessionstring = callString(["testsession"], sessionid)
-    return requestFromAPI(testsessionstring)
-
-
 def checkdatause(sessionid):
-    checkstring = callString(["getdataused"], sessionid)
-    return requestFromAPI(checkstring)
+    checkstring = __callString(["getdataused"], sessionid)
+    return __requestFromAPI(checkstring)
 
 
 def getplayer(player, sessionid):
-    return requestFromAPI(callString(["getplayer", player], sessionid))
+    return __requestFromAPI(__callString(["getplayer", player], sessionid))
 
 
 def getmatchhistory(playerid, sessionid):
-    return requestFromAPI(callString(["getmatchhistory", str(playerid)], sessionid))
+    return __requestFromAPI(__callString(["getmatchhistory", str(playerid)], sessionid))
+
+
+def getgods(sessionid):
+    return __requestFromAPI(__callString(["getgods", "1"], sessionid))
 
 
 def getmatchidsbyqueue(queue, date, hour, sessionid):
-    return requestFromAPI(callString(["getmatchidsbyqueue", str(queue), date, hour], sessionid))
+    return __requestFromAPI(__callString(["getmatchidsbyqueue", str(queue), date, hour], sessionid))
     # Date format: 20171231
     # hour = 0...23 or by each 10min like so: "3,00" or "3,50"
     # QUEUE ID
