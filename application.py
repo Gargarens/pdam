@@ -1,7 +1,6 @@
 import datetime
-
+import databasehandler
 import apihandler
-import helper
 from flask import Flask, render_template, request, flash
 
 application = Flask(__name__)
@@ -15,6 +14,17 @@ session_start_time = datetime.datetime.utcnow()
 def index():
     # flash("Player name")
     return render_template("index.html")
+
+
+@application.route("/createtables", methods=["POST", "GET"])
+def createtables():
+    players = databasehandler.getplayers()
+    columns = ["god", "conquest", "arena", "joust", "assault", "under30arena", "conquestranked", "under30conquest",
+                 "under30joust", "joustranked", "slash", "duelranked"]
+    for player in players:
+        name = player[1]
+        databasehandler.createtable(name, columns)
+    return render_template("createtables.html")
 
 
 @application.route("/start", methods=["POST", "GET"])
@@ -36,16 +46,16 @@ def arena():
     playername = "creviceguy"
     date = "20220427"
     hour = "20"
-    arenadata = apihandler.getmatchidsbyqueue(435, date, hour, session_id)
-    print("Matches for " + date + ", hour " + hour + ":")
-    print(arenadata)
+    #arenadata = apihandler.getmatchidsbyqueue(435, date, hour, session_id)
+    #print("Matches for " + date + ", hour " + hour + ":")
+    #print(arenadata)
     return render_template("arena.html")
 
 
 @application.route("/player", methods=["POST", "GET"])
 def player():
     global session_id
-    playername = "creviceguy"
+    playername = "BigGirl2003"
     playerdata = apihandler.getplayer(playername, session_id)[0]
     playerid = playerdata["Id"]
     matchhistory = apihandler.getmatchhistory(playerid, session_id)
@@ -87,6 +97,9 @@ def check():
     sessionsLeft = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
     flash("Sessions left: " + str(sessionsLeft))
 
+    #databasehandler.createtable("gods (name, role, pantheon)")
+    databasehandler.testtable("gods")
+
     return render_template("check.html")
 
 
@@ -95,6 +108,7 @@ def gods():
     global session_id
     gods_call_string = apihandler.callString(["getgods", "1"], session_id)
     god_data = apihandler.requestFromAPI(gods_call_string)
+    dbdata = []
     assassins = list()
     guardians = list()
     hunters = list()
@@ -102,21 +116,10 @@ def gods():
     warriors = list()
     roles = [assassins, guardians, hunters, mages, warriors]
     for god in god_data:
-        role = (god["Roles"].lower())
-        if role == "assassin":
-            roles[0].append(god)
-        elif role == "guardian":
-            roles[1].append(god)
-        elif role == "hunter":
-            roles[2].append(god)
-        elif role == "mage":
-            roles[3].append(god)
-        elif role == "warrior":
-            roles[4].append(god)
-        else:
-            print("Role parsing error for " + god["Name"])
-    for role in roles:
-        flash("ROLE")
-        for god in role:
-            flash(god["Name"])
+        dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
+    databasehandler.insertintotable(dbdata, "gods")
+    # for role in roles:
+    #     flash("ROLE")
+    #     for god in role:
+    #         flash(god["Name"])
     return render_template("gods.html")
