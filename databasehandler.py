@@ -36,16 +36,6 @@ def createtable(table, params):
     connection.close()
 
 
-def testtable(table):
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    print("testing " + table)
-    for row in cursor.execute("select * from " + table):
-        print(row)
-    connection.commit()
-    connection.close()
-
-
 def getplayers():
     connection = sqlite3.connect(db)
     cursor = connection.cursor()

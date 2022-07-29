@@ -88,17 +88,12 @@ def check():
     sessionsLeft = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
     flash("Sessions left: " + str(sessionsLeft))
 
-    # databasehandler.createtable("gods (name, role, pantheon)")
-    # databasehandler.testtable("gods")
-
     return render_template("check.html")
 
 
 @application.route("/gods", methods=["POST", "GET"])
 def gods():
     global session_id
-    # gods_call_string = apihandler.callString(["getgods", "1"], session_id)
-    # god_data = apihandler.requestFromAPI(gods_call_string)
     god_data = getgods(session_id)
     dbdata = []
     for god in god_data:
@@ -111,3 +106,4 @@ def gods():
 @application.route("/update", methods=["POST", "GET"])
 def update():
     global session_id
+    recent = getmatchhistory()
