@@ -18,26 +18,28 @@ def index():
 
 @application.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    players = getplayersdb()
-    tables = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
-    columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
-               "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
-               "selfhealing INTEGER DEFAULT (0)"]
-    godsfromdb = getgodsdb()
-    gods = []
-    rows = []
-    for tuple in godsfromdb:
-        gods.append(tuple[0])
-    for god in gods:
-        values = (god, 0, 0, 0, 0, 0, 0)
-        rows.append(values)
-    for player in players:
-        name = player[1]
-        for table in tables:
-            tablename = name + "_" + table
-            createtable(tablename, columns)
-            sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
-            sqlexecutemany(sql, rows)
+    # ALL COMMENTED OUT TO NOT FUCK UP THE DATABASE
+    # players = getplayersdb()
+    # tables = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
+    # columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
+    #            "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
+    #            "selfhealing INTEGER DEFAULT (0)"]
+    # godsfromdb = getgodsdb()
+    # gods = []
+    # rows = []
+    # for tuple in godsfromdb:
+    #     gods.append(tuple[0])
+    # for god in gods:
+    #     values = (god, 0, 0, 0, 0, 0, 0)
+    #     rows.append(values)
+    # for player in players:
+    #     name = player[1]
+    #     for table in tables:
+    #         tablename = name + "_" + table
+    #         createtable(tablename, columns)
+    #         sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
+    #         sqlexecutemany(sql, rows)
+    flash("Add new gods manually")
 
     return render_template("createtables.html")
 
