@@ -9,7 +9,7 @@ time_since_start = 0
 sessionid = 0
 session_start_time = datetime.datetime.utcnow()
 modes = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
-
+enabledplayers = ["Spuik", "creviceguy", "MeatEater04"]
 
 @application.route("/")
 def index():
@@ -105,9 +105,15 @@ def gods():
 def update():
     global sessionid
     players = getplayersdb()
+    verbose = False
     for player in players:
         playerid = player[0]
         playername = player[1]
+        if playername not in enabledplayers:
+            print("Skipping " + playername + " because it's not in the list of "
+                                             "enabled players.")
+            continue
+        print("Updating " + playername)
         recent = getmatchhistory(playerid, sessionid)
 
         for match in recent:
@@ -120,10 +126,10 @@ def update():
                 print("Error for player " + playername)
                 go = False
             if not go:
-                break
+                continue
             mode = str(match["Match_Queue_Id"])
             if mode not in modes:
-                break
+                continue
             damage = match["Damage"]
             mitigated = match["Damage_Mitigated"]
             kills = match["Kills"]
@@ -137,25 +143,37 @@ def update():
                 top = tabledata[0]
             else:
                 print("NOTHING IN DB-------------\nGod: " + god)
-                break
+                continue
             # (0:GOD, 1:DMG, 2:MIT, 3:KILL, 4:ASSIST, 5:HEAL, 6:SELFHEAL)
             if damage > top[1]:
                 sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
+                if verbose:
+                    print("New damage PR for " + playername + "(" + god + ")")
                 runsql(sql)
             if mitigated > top[2]:
                 sql = "UPDATE " + table + " SET mitigated = " + str(mitigated) + " WHERE god='" + god + "'"
+                if verbose:
+                    print("New mitigated PR for " + playername + "(" + god + ")")
                 runsql(sql)
             if kills > top[3]:
                 sql = "UPDATE " + table + " SET kills = " + str(kills) + " WHERE god='" + god + "'"
+                if verbose:
+                    print("New kills PR for " + playername + "(" + god + ")")
                 runsql(sql)
             if assists > top[4]:
                 sql = "UPDATE " + table + " SET assists = " + str(assists) + " WHERE god='" + god + "'"
+                if verbose:
+                    print("New assists PR for " + playername + "(" + god + ")")
                 runsql(sql)
             if healing > top[5]:
                 sql = "UPDATE " + table + " SET healing = " + str(healing) + " WHERE god='" + god + "'"
+                if verbose:
+                    print("New healing PR for " + playername + "(" + god + ")")
                 runsql(sql)
             if selfhealing > top[6]:
                 sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
+                if verbose:
+                    print("New selfhealing PR for " + playername + "(" + god + ")")
                 runsql(sql)
     return render_template("update.html")
 
