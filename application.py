@@ -111,8 +111,9 @@ def update():
         recent = getmatchhistory(playerid, sessionid)
 
         for match in recent:
-            # Sometimes API returns just zeroes. Skip those matches
+            # Sometimes API returns just "None"s. Skip those matches
             go = True
+            god = ""
             try:
                 god = match["God"].replace("_", " ")
             except:
@@ -134,6 +135,7 @@ def update():
                 top = tabledata[0]
             else:
                 print("NOTHING IN DB-------------\nGod: " + god)
+                break
             # (0:GOD, 1:DMG, 2:MIT, 3:KILL, 4:ASSIST, 5:HEAL, 6:SELFHEAL)
             if damage > top[1]:
                 sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
@@ -153,6 +155,9 @@ def update():
             if selfhealing > top[6]:
                 sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
                 runsql(sql)
-
-
     return render_template("update.html")
+
+
+@application.route("/scoreboard", methods=["POST", "GET"])
+def scoreboard():
+    return render_template("scoreboard.html")
