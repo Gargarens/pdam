@@ -24,7 +24,6 @@ def getSessionID():
     ts = timestamp(time)
     createsessionstring = api + "createsessionjson/" + devid + "/" + signature("createsession") + "/" + ts
     sessionid = requests.get(createsessionstring).json()["session_id"]
-    #print("SESSION ID:\n" + sessionid)
     return sessionid, ts, time
 
 

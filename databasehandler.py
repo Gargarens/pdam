@@ -14,11 +14,8 @@ def insertintotable(data, table):
 
 
 def truncatetable(table):
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    cursor.execute("truncate table " + table)
-    connection.commit()
-    connection.close()
+    sql = "truncate table " + table
+    runsql(sql)
 
 
 def createtable(table, params):
@@ -30,39 +27,54 @@ def createtable(table, params):
         for param in params:
             executestring = executestring + param + ", "
         executestring = executestring[:-2] + ")"
-    print("STRING:\n" + executestring)
     cursor.execute(executestring)
     connection.commit()
     connection.close()
 
 
 def getplayers():
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    cursor.execute("select * from players")
-    players = cursor.fetchall()
-    connection.close()
-    return players
+    sql = "select * from players"
+    return fetchsql(sql)
 
 
 def checksqliteversion():
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    cursor.execute("SELECT sqlite_version();")
-    res = cursor.fetchall()
-    connection.close()
-    return res
+    sql = "SELECT sqlite_version();"
+    return fetchsql(sql)
 
 
 def getplayerid(playername):
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    cursor.execute("SELECT player_id FROM players WHERE name='" + playername + "'")
-    playerid = str(cursor.fetchall()[0][0])
-    connection.close()
+    sql = "SELECT player_id FROM players WHERE name='" + playername + "'"
+    playerid = str(fetchsql(sql)[0][0])
     return playerid
 
 
+def runsql(sql):
+    connection = sqlite3.connect(db)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    connection.commit()
+    connection.close()
 
 
+def sqlexecutemany(sql, values):
+    connection = sqlite3.connect(db)
+    cursor = connection.cursor()
+    #print("SQL:\n" + sql + "\nVALUES:")
+    #print(values)
+    cursor.executemany(sql, values)
+    connection.commit()
+    connection.close()
 
+
+def fetchsql(sql):
+    connection = sqlite3.connect(db)
+    cursor = connection.cursor()
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    connection.close()
+    return result
+
+
+def getgodsdb():
+    sql = "select name from gods"
+    return fetchsql(sql)

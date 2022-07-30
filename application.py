@@ -19,11 +19,26 @@ def index():
 @application.route("/createtables", methods=["POST", "GET"])
 def createtables():
     players = getplayers()
-    columns = ["god", "conquest", "arena", "joust", "assault", "under30arena", "conquestranked", "under30conquest",
-                 "under30joust", "joustranked", "slash", "duelranked"]
+    tables = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
+    columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
+               "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
+               "selfhealing INTEGER DEFAULT (0)"]
+    godsfromdb = getgodsdb()
+    gods = []
+    rows = []
+    for tuple in godsfromdb:
+        gods.append(tuple[0])
+    for god in gods:
+        values = (god, 0, 0, 0, 0, 0, 0)
+        rows.append(values)
     for player in players:
         name = player[1]
-        createtable(name, columns)
+        for table in tables:
+            tablename = name + "_" + table
+            createtable(tablename, columns)
+            sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
+            sqlexecutemany(sql, rows)
+
     return render_template("createtables.html")
 
 
@@ -109,5 +124,16 @@ def update():
     playername = "Spuik"
     playerid = getplayerid(playername)
     recent = getmatchhistory(playerid, sessionid)
-    print(recent[0])
+
+    for match in recent:
+        god = match["God"]
+        mode = match["Match_Queue_Id"]
+        damage = match["Damage"]
+        mitigated = match["Damage_Mitigated"]
+        kills = match["Kills"]
+        assists = match["Assists"]
+        healing = match["Healing"]
+        selfhealing = match["Healing_Player_Self"]
+
+
     return render_template("update.html")
