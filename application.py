@@ -67,25 +67,6 @@ def arena():
     return render_template("arena.html")
 
 
-@application.route("/player", methods=["POST", "GET"])
-def player():
-    global sessionid
-    playername = "BigGirl2003"
-    playerdata = getplayer(playername, sessionid)[0]
-    playerid = playerdata["Id"]
-    matchhistory = getmatchhistory(playerid, sessionid)
-    arenamatches = []
-    under30arenamatches = []
-    for match in matchhistory:
-        if match["Match_Queue_Id"] == 435:
-            arenamatches.append(match)
-        elif match["Match_Queue_Id"] == 10195:
-            under30arenamatches.append(match)
-
-    print("Found " + str(len(arenamatches)) + " arena matches and " + str(len(under30arenamatches)) + " under30arena matches for " + playername + ".")
-    return render_template("player.html")
-
-
 @application.route("/check", methods=["POST", "GET"])
 def check():
     global time_since_start
