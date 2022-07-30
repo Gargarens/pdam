@@ -24,14 +24,13 @@ def getSessionID():
     ts = timestamp(time)
     createsessionstring = api + "createsessionjson/" + devid + "/" + signature("createsession") + "/" + ts
     sessionid = requests.get(createsessionstring).json()["session_id"]
-    return sessionid, ts, time
+    return str(sessionid), ts, time
 
 
 def __callString(params, sessionid):
     # params is list with method name (i.e. "createsession") as first element
     # and any possible parameters after {timestamp} as next elements
-    callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" \
-                 + sessionid + "/" + timestamp(datetimenow())
+    callstring = api + params[0] + "json/" + devid + "/" + signature(params[0]) + "/" + sessionid + "/" + timestamp(datetimenow())
     for param in params[1:]:
         callstring = callstring + "/" + param
     print("CALLSTRING (" + params[0] + "):\n" + callstring)

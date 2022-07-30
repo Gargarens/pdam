@@ -1,0 +1,1 @@
+non-supported game modes break update-page
