@@ -18,21 +18,31 @@ def truncatetable(table):
     runsql(sql)
 
 
+# def createtable(table, params):
+#     connection = sqlite3.connect(db)
+#     cursor = connection.cursor()
+#     executestring = "create table if not exists " + table
+#     if len(params) > 0:
+#         executestring = executestring + " ("
+#         for param in params:
+#             executestring = executestring + param + ", "
+#         executestring = executestring[:-2] + ")"
+#     cursor.execute(executestring)
+#     connection.commit()
+#     connection.close()
+
+# refactored version, can delete one above after this is tested
 def createtable(table, params):
-    connection = sqlite3.connect(db)
-    cursor = connection.cursor()
-    executestring = "create table if not exists " + table
+    sql = "create table if not exists " + table
     if len(params) > 0:
-        executestring = executestring + " ("
+        sql = sql + " ("
         for param in params:
-            executestring = executestring + param + ", "
-        executestring = executestring[:-2] + ")"
-    cursor.execute(executestring)
-    connection.commit()
-    connection.close()
+            sql = sql + param + ", "
+        sql = sql[:-2] + ")"
+    runsql(sql)
 
 
-def getplayers():
+def getplayersdb():
     sql = "select * from players"
     return fetchsql(sql)
 

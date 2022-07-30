@@ -18,7 +18,7 @@ def index():
 
 @application.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    players = getplayers()
+    players = getplayersdb()
     tables = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
     columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
                "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
@@ -121,19 +121,55 @@ def gods():
 @application.route("/update", methods=["POST", "GET"])
 def update():
     global sessionid
-    playername = "Spuik"
-    playerid = getplayerid(playername)
-    recent = getmatchhistory(playerid, sessionid)
+    players = getplayersdb()
+    for player in players:
+        playerid = player[0]
+        playername = player[1]
+        recent = getmatchhistory(playerid, sessionid)
 
-    for match in recent:
-        god = match["God"]
-        mode = match["Match_Queue_Id"]
-        damage = match["Damage"]
-        mitigated = match["Damage_Mitigated"]
-        kills = match["Kills"]
-        assists = match["Assists"]
-        healing = match["Healing"]
-        selfhealing = match["Healing_Player_Self"]
+        for match in recent:
+            # Sometimes API returns just zeroes. Skip those matches
+            go = True
+            try:
+                god = match["God"].replace("_", " ")
+            except:
+                print("Error for player " + playername)
+                go = False
+            if not go:
+                break
+            mode = str(match["Match_Queue_Id"])
+            damage = match["Damage"]
+            mitigated = match["Damage_Mitigated"]
+            kills = match["Kills"]
+            assists = match["Assists"]
+            healing = match["Healing"]
+            selfhealing = match["Healing_Player_Self"]
+            table = playername + "_" + mode
+            sql = "SELECT * FROM " + table + " WHERE god = '" + god + "'"
+            tabledata = fetchsql(sql)
+            if len(tabledata) > 0:
+                top = tabledata[0]
+            else:
+                print("NOTHING IN DB-------------\nGod: " + god)
+            # (0:GOD, 1:DMG, 2:MIT, 3:KILL, 4:ASSIST, 5:HEAL, 6:SELFHEAL)
+            if damage > top[1]:
+                sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
+                runsql(sql)
+            if mitigated > top[2]:
+                sql = "UPDATE " + table + " SET mitigated = " + str(mitigated) + " WHERE god='" + god + "'"
+                runsql(sql)
+            if kills > top[3]:
+                sql = "UPDATE " + table + " SET kills = " + str(kills) + " WHERE god='" + god + "'"
+                runsql(sql)
+            if assists > top[4]:
+                sql = "UPDATE " + table + " SET assists = " + str(assists) + " WHERE god='" + god + "'"
+                runsql(sql)
+            if healing > top[5]:
+                sql = "UPDATE " + table + " SET healing = " + str(healing) + " WHERE god='" + god + "'"
+                runsql(sql)
+            if selfhealing > top[6]:
+                sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
+                runsql(sql)
 
 
     return render_template("update.html")
