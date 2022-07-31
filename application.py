@@ -209,11 +209,13 @@ def scoreboard():
             tableindb = player + "_" + mode
             for i in range(len(columns)):
                 top = gettopvalue(tableindb, columns[i])
-                # sql = "SELECT * FROM " + tableindb
-                # data = fetchsql(sql)
-                table[0].append(player)
-                table[1].append(modes[mode])
-                table[2].append(top[0])
-                table[i+3].append(top[1])
+                entry = [player, modes[mode], top[0], "", "", "", "", "", ""]
+                entry[i+3] = top[1]
+                for i in range(len(entry)):
+                    table[i].append(entry[i])
 
     return render_template("scoreboard.html", table=table, len=len)
+
+
+if __name__ == '__main__':
+    application.run(debug=True)

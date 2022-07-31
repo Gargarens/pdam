@@ -78,6 +78,11 @@
     </table>
 </body>
 <script type="text/javascript">
-    $('#scores').DataTable();
+    $('#scores').DataTable({
+        lengthMenu: [
+            [-1, 50, 25, 10],
+            ['All', 50, 25, 10],
+        ],
+    });
 </script>
 </html>
