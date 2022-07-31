@@ -7,8 +7,22 @@ application.secret_key = "cockandballs"
 time_since_start = 0
 sessionid = 0
 session_start_time = datetime.datetime.utcnow()
-modes = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
+modekeys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
 enabledplayers = ["Spuik", "creviceguy", "MeatEater04"]
+modes = {
+    "426":   "Conquest",
+    "435":   "Arena",
+    "448":   "Joust",
+    "445":   "Assault",
+    "10195": "Under 30 Arena",
+    "451":   "Conquest Ranked",
+    "10193": "Under 30 Conquest",
+    "10197": "Under 30 Joust",
+    "459":   "Siege",
+    "450":   "Joust Ranked",
+    "10189": "Slash",
+    "440":   "Duel Ranked"
+}
 
 @application.route("/")
 def index():
@@ -127,7 +141,7 @@ def update():
             if not go:
                 continue
             mode = str(match["Match_Queue_Id"])
-            if mode not in modes:
+            if mode not in modekeys:
                 continue
             damage = match["Damage"]
             mitigated = match["Damage_Mitigated"]
@@ -189,12 +203,17 @@ def scoreboard():
     healing = []
     selfhealing = []
     table = [name, queue, god, damage, mitigated, kills, assists, healing, selfhealing]
-    for mode in modes:
+    columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
+    for mode in modekeys:
         for player in enabledplayers:
             tableindb = player + "_" + mode
-            sql = "SELECT * FROM " + tableindb
-            data = fetchsql(sql)
-            table[0].append(player)
-            table[1].append(mode)
-    print(table)
+            for i in range(len(columns)):
+                top = gettopvalue(tableindb, columns[i])
+                # sql = "SELECT * FROM " + tableindb
+                # data = fetchsql(sql)
+                table[0].append(player)
+                table[1].append(modes[mode])
+                table[2].append(top[0])
+                table[i+3].append(top[1])
+
     return render_template("scoreboard.html", table=table, len=len)

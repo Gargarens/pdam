@@ -88,3 +88,11 @@ def fetchsql(sql):
 def getgodsdb():
     sql = "select name from gods"
     return fetchsql(sql)
+
+
+def gettopvalue(table, column):
+    sql = "SELECT MAX(" + column + ") FROM " + table
+    maxvalue = fetchsql(sql)[0][0]
+    sql = "SELECT god, " + column + " FROM " + table + " WHERE " + column + "=" + str(maxvalue)
+    result = fetchsql(sql)[0]
+    return result
