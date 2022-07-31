@@ -46,6 +46,45 @@
 
 <body>
     <h1 id="lol">Scoreboard</h1>
+    <div>
+        <input type="radio" name="record-type" value="damage" id="damage">
+        <label for="damage">Damage</label>
+    </div>
+    <div>
+        <input type="radio" name="record-type" value="mitigated" id="mitigated">
+        <label for="mitigated">Mitigated</label>
+    </div>
+    <div>
+        <input type="radio" name="record-type" value="kills" id="kills">
+        <label for="kills">Kills</label>
+    </div>
+    <div>
+        <input type="radio" name="record-type" value="assists" id="assists">
+        <label for="assists">Assists</label>
+    </div>
+    <div>
+        <input type="radio" name="record-type" value="healing" id="healing">
+        <label for="healing">Healing</label>
+    </div>
+    <div>
+        <input type="radio" name="record-type" value="selfhealing" id="selfhealing">
+        <label for="selfhealing">Self Healing</label>
+    </div>
+    <script>
+        const radioButtons = document.querySelectorAll('input[name="record-type"]');
+        for(const radioButton of radioButtons){
+            radioButton.addEventListener('change', showSelected);
+        }
+
+        function showSelected(e) {
+            console.log(e)
+            if(this.checked) {
+                {% print("lol") %}
+                console.log('selected ${this.value}';
+            }
+        }
+
+    </script>
     <table id="scores" class="content-table">
         <thead>
             <tr>
@@ -82,6 +121,33 @@
         lengthMenu: [
             [-1, 50, 25, 10],
             ['All', 50, 25, 10],
+        ],
+        columnDefs: [
+            {
+                target: 4,
+                visible: false,
+                searchable: false,
+            },
+            {
+                target: 5,
+                visible: false,
+                searchable: false,
+            },
+            {
+                target: 6,
+                visible: false,
+                searchable: false,
+            },
+            {
+                target: 7,
+                visible: false,
+                searchable: false,
+            },
+            {
+                target: 8,
+                visible: false,
+                searchable: false,
+            },
         ],
     });
 </script>
