@@ -1,4 +1,3 @@
-import datetime
 from databasehandler import *
 from apihandler import *
 from flask import Flask, render_template, request, flash
@@ -180,4 +179,22 @@ def update():
 
 @application.route("/scoreboard", methods=["POST", "GET"])
 def scoreboard():
-    return render_template("scoreboard.html")
+    name = []
+    queue = []
+    god = []
+    damage = []
+    mitigated = []
+    kills = []
+    assists = []
+    healing = []
+    selfhealing = []
+    table = [name, queue, god, damage, mitigated, kills, assists, healing, selfhealing]
+    for mode in modes:
+        for player in enabledplayers:
+            tableindb = player + "_" + mode
+            sql = "SELECT * FROM " + tableindb
+            data = fetchsql(sql)
+            table[0].append(player)
+            table[1].append(mode)
+
+    return render_template("scoreboard.html", table=table)
