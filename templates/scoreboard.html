@@ -50,6 +50,7 @@
         <thead>
             <tr>
                 <th>Player</th>
+                <th>Mode</th>
                 <th>God</th>
                 <th>Damage</th>
                 <th>Mitigated</th>
@@ -60,46 +61,19 @@
             </tr>
         </thead>
         <tbody>
+            {% for i in range(len(table[0])) %}
             <tr>
-                <td>creviceguy</td>
-                <td>Agni</td>
-                <td>15</td>
-                <td>20190</td>
-                <td>2</td>
-                <td>22</td>
-                <td>4300</td>
-                <td>900</td>
+                <td>{{table[0][i]}}</td>
+                <td>{{table[1][i]}}</td>
+                <td>{{table[2][i]}}</td>
+                <td>{{table[3][i]}}</td>
+                <td>{{table[4][i]}}</td>
+                <td>{{table[5][i]}}</td>
+                <td>{{table[6][i]}}</td>
+                <td>{{table[7][i]}}</td>
+                <td>{{table[8][i]}}</td>
             </tr>
-            <tr>
-                <td>creviceguy</td>
-                <td>Cu Chulainn</td>
-                <td>15042</td>
-                <td>28190</td>
-                <td>20</td>
-                <td>2</td>
-                <td>400</td>
-                <td>9000</td>
-            </tr>
-            <tr>
-                <td>Läsäri</td>
-                <td>Agni</td>
-                <td>10455</td>
-                <td>10190</td>
-                <td>12</td>
-                <td>21</td>
-                <td>300</td>
-                <td>100</td>
-            </tr>
-            <tr>
-                <td>Spuik</td>
-                <td>Aphrodite</td>
-                <td>45055</td>
-                <td>80190</td>
-                <td>15</td>
-                <td>34</td>
-                <td>43000</td>
-                <td>49000</td>
-            </tr>
+        {% endfor %}
         </tbody>
     </table>
 </body>

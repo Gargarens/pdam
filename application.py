@@ -196,5 +196,5 @@ def scoreboard():
             data = fetchsql(sql)
             table[0].append(player)
             table[1].append(mode)
-
-    return render_template("scoreboard.html", table=table)
+    print(table)
+    return render_template("scoreboard.html", table=table, len=len)
