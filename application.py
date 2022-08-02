@@ -193,29 +193,26 @@ def update():
 
 @application.route("/scoreboard", methods=["POST", "GET"])
 def scoreboard():
-    name = []
-    queue = []
-    god = []
-    damage = []
-    mitigated = []
-    kills = []
-    assists = []
-    healing = []
-    selfhealing = []
-    table = [name, queue, god, damage, mitigated, kills, assists, healing, selfhealing]
+    tables = []
     columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
     for mode in modekeys:
+        name = []
+        queue = []
+        god = []
+        damage = []
+        mitigated = []
+        kills = []
+        assists = []
+        healing = []
+        selfhealing = []
+        table = [name, queue, god, damage, mitigated, kills, assists, healing, selfhealing]
         for player in enabledplayers:
             tableindb = player + "_" + mode
             for i in range(len(columns)):
                 top = gettopvalue(tableindb, columns[i])
-                entry = [player, modes[mode], top[0], "", "", "", "", "", ""]
+                entry = [player, modes[mode], top[0], 0, 0, 0, 0, 0, 0]
                 entry[i+3] = top[1]
                 for i in range(len(entry)):
                     table[i].append(entry[i])
-
-    return render_template("scoreboard.html", table=table, len=len)
-
-
-if __name__ == '__main__':
-    application.run(debug=True)
+        tables.append(table)
+    return render_template("scoreboard.html", tables=tables, len=len)

@@ -14,6 +14,7 @@
         border-collapse: collapse;
         margin: 25px 0;
         font-size: 0.9em;
+        max-width: 70%;
         min-width: 600px;
         border-radius: 5px 5px 0 0;
         overflow: hidden;
@@ -46,75 +47,46 @@
 
 <body>
     <h1 id="lol">Scoreboard</h1>
-    <div>
-        <input type="radio" name="record-type" value="damage" id="damage">
-        <label for="damage">Damage</label>
-    </div>
-    <div>
-        <input type="radio" name="record-type" value="mitigated" id="mitigated">
-        <label for="mitigated">Mitigated</label>
-    </div>
-    <div>
-        <input type="radio" name="record-type" value="kills" id="kills">
-        <label for="kills">Kills</label>
-    </div>
-    <div>
-        <input type="radio" name="record-type" value="assists" id="assists">
-        <label for="assists">Assists</label>
-    </div>
-    <div>
-        <input type="radio" name="record-type" value="healing" id="healing">
-        <label for="healing">Healing</label>
-    </div>
-    <div>
-        <input type="radio" name="record-type" value="selfhealing" id="selfhealing">
-        <label for="selfhealing">Self Healing</label>
-    </div>
-    <script>
-        const radioButtons = document.querySelectorAll('input[name="record-type"]');
-        for(const radioButton of radioButtons){
-            radioButton.addEventListener('change', showSelected);
-        }
 
-        function showSelected(e) {
-            console.log(e)
-            if(this.checked) {
-                {% print("lol") %}
-                console.log('selected ${this.value}';
-            }
-        }
+    <button onclick="showColumn(3)">Damage</button>
+    <button onclick="showColumn(4)">Mitigation</button>
+    <button onclick="showColumn(5)">Kills</button>
+    <button onclick="showColumn(6)">Assists</button>
+    <button onclick="showColumn(7)">Healing</button>
+    <button onclick="showColumn(8)">Self Healing</button>
 
-    </script>
-    <table id="scores" class="content-table">
-        <thead>
-            <tr>
-                <th>Player</th>
-                <th>Mode</th>
-                <th>God</th>
-                <th>Damage</th>
-                <th>Mitigated</th>
-                <th>Kills</th>
-                <th>Assists</th>
-                <th>Healing</th>
-                <th>Self Healing</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for i in range(len(table[0])) %}
-            <tr>
-                <td>{{table[0][i]}}</td>
-                <td>{{table[1][i]}}</td>
-                <td>{{table[2][i]}}</td>
-                <td>{{table[3][i]}}</td>
-                <td>{{table[4][i]}}</td>
-                <td>{{table[5][i]}}</td>
-                <td>{{table[6][i]}}</td>
-                <td>{{table[7][i]}}</td>
-                <td>{{table[8][i]}}</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div>
+        <table id="scores" class="content-table">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>Mode</th>
+                    <th>God</th>
+                    <th>Damage</th>
+                    <th>Mitigated</th>
+                    <th>Kills</th>
+                    <th>Assists</th>
+                    <th>Healing</th>
+                    <th>Self Healing</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(len(tables[0][0])) %}
+                    <tr>
+                        <td>{{tables[0][0][i]}}</td>
+                        <td>{{tables[0][1][i]}}</td>
+                        <td>{{tables[0][2][i]}}</td>
+                        <td>{{tables[0][3][i]}}</td>
+                        <td>{{tables[0][4][i]}}</td>
+                        <td>{{tables[0][5][i]}}</td>
+                        <td>{{tables[0][6][i]}}</td>
+                        <td>{{tables[0][7][i]}}</td>
+                        <td>{{tables[0][8][i]}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </body>
 <script type="text/javascript">
     $('#scores').DataTable({
@@ -149,6 +121,16 @@
                 searchable: false,
             },
         ],
+        order: [[3, 'desc']],
     });
+</script>
+<script>
+    function showColumn(column) {
+        var table = $('#scores').DataTable();
+        table.columns([3, 4, 5, 6, 7, 8]).visible( false );
+        table.column(column).visible(true);
+        table.order([column, 'desc']).draw();
+        //table.columns(1).search("joust", false, false).draw();
+    }
 </script>
 </html>
