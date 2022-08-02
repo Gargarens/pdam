@@ -8,7 +8,7 @@ time_since_start = 0
 sessionid = 0
 session_start_time = datetime.datetime.utcnow()
 modekeys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
-enabledplayers = ["Spuik", "creviceguy", "MeatEater04"]
+enabledplayers = ["creviceguy", "Spuik", "MeatEater04"]
 modes = {
     "426":   "Conquest",
     "435":   "Arena",
@@ -213,32 +213,28 @@ def scoreboard():
                 entry[i+3] = top[1]
                 for i in range(len(entry)):
                     table[i].append(entry[i])
-        tables.append(table)
     return render_template("scoreboard.html", table=table, len=len)
 
 
-@application.route("/scores", methods=["POST", "GET"])
-def scores():
-    tables = []
-    columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
-    for mode in modekeys:
-        name = []
-        queue = []
-        god = []
-        damage = []
-        mitigated = []
-        kills = []
-        assists = []
-        healing = []
-        selfhealing = []
-        table = [name, queue, god, damage, mitigated, kills, assists, healing, selfhealing]
+@application.route("/conquest", methods=["POST", "GET"])
+def conquest():
+    tableheaders = []
+    mode = "426"
+    column = "damage"
+    rows = []
+    gods = []
+    for player in enabledplayers:
+        tableheaders.append(player)
+    for godtuple in getgodsdb():
+        god = godtuple[0]
+        gods.append(god)
+        entry = []
+        if "'" in god:
+            god = god.replace("'", "''") # double up any apostrophes for SQL
         for player in enabledplayers:
-            tableindb = player + "_" + mode
-            for i in range(len(columns)):
-                top = gettopvalue(tableindb, columns[i])
-                entry = [player, modes[mode], top[0], 0, 0, 0, 0, 0, 0]
-                entry[i + 3] = top[1]
-                for i in range(len(entry)):
-                    table[i].append(entry[i])
-        tables.append(table)
-    return render_template("scores.html", tables=tables, len=len)
+            topvalue = gettopforgod(player + "_" + mode, column, god)
+            entry.append(topvalue)
+        rows.append(entry)
+    if len(gods) != len(rows):
+        print("Different amount of rows for gods and records.")
+    return render_template("conquest.html", tableheaders=tableheaders, gods=gods, rows=rows, len=len)

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Puff Daddy Continental</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+</head>
+
+<style>
+    .content-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        max-width: 70%;
+        min-width: 600px;
+        border-radius: 5px 5px 0 0;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .content-table thead tr {
+        background-color: #909090;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .content-table th,
+    .content-table td {
+        padding: 8px 15px;
+    }
+
+    .content-table tbody tr {
+        border-bottom: 1px solid #303030;
+    }
+
+    .content-table tbody tr:nth-of-type(even) {
+        background-color: #c0c0c0;
+    }
+
+    .content-table tbody tr:last-of-type {
+        border-bottom: 2px solid #303030;
+    }
+
+    .god-column {
+        text-align: left;
+    }
+
+    .data-column {
+        text-align: right;
+    }
+
+    .god-header {
+        text-align: left;
+    }
+
+    .data-header {
+        text-align: right;
+    }
+
+
+</style>
+
+<body>
+    <h1 id="lol">Conquest leaderboard</h1>
+    <div>
+        <table id="scores" class="content-table">
+            <thead>
+                <tr>
+                    <th class="god-header">God</th>
+                    {% for header in tableheaders %}
+                        <th class="data-header">{{header}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(len(rows)) %}
+                    <tr>
+                        <td class="god-column">{{gods[i]}}</td>
+                        {% for value in rows[i] %}
+                            <td class="data-column">{{value}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

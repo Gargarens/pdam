@@ -96,3 +96,9 @@ def gettopvalue(table, column):
     sql = "SELECT god, " + column + " FROM " + table + " WHERE " + column + "=" + str(maxvalue)
     result = fetchsql(sql)[0]
     return result
+
+
+def gettopforgod(table, column, god):
+    sql = "SELECT " + column + " FROM " + table + " WHERE god = '" + god + "'"
+    result = fetchsql(sql)[0][0]
+    return result

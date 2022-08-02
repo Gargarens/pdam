@@ -12,13 +12,13 @@
         {% for message in get_flashed_messages()%}
             <p> {{message}} </p>
         {% endfor %}
-        <br>
-<!--        <input type="text" name="name_input">-->
-        <br>
         <input type="submit" value="START" id ="start">
     </form>
     <form action="scoreboard" method="post">
         <input type="submit" value="SCOREBOARD" id="scoreboard">
+    </form>
+   <form action="conquest" method="post">
+        <input type="submit" value="CONQUEST" id="conquest">
     </form>
 </body>
 </html>
