@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Puff Daddy Continental</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
 <style>
@@ -64,12 +64,12 @@
 <body>
     <h1 id="lol">Conquest leaderboard</h1>
     <div>
-        <button type="button" onclick="selectColumn('damage')">Player Damage</button><br>
-        <button type="button" onclick="selectColumn('mitigated')">Mitigation</button><br>
-        <button type="button" onclick="selectColumn('kills')">Kills</button><br>
-        <button type="button" onclick="selectColumn('assists')">Assists</button><br>
-        <button type="button" onclick="selectColumn('healing')">Healing</button><br>
-        <button type="button" onclick="selectColumn('selfhealing')">Self Healing</button><br>
+        <button type="button" onclick="selectColumn('damage', {{rows}})">Player Damage</button><br>
+        <button type="button" onclick="selectColumn('mitigated', {{rows}})">Mitigation</button><br>
+        <button type="button" onclick="selectColumn('kills', {{rows}})">Kills</button><br>
+        <button type="button" onclick="selectColumn('assists', {{rows}})">Assists</button><br>
+        <button type="button" onclick="selectColumn('healing', {{rows}})">Healing</button><br>
+        <button type="button" onclick="selectColumn('selfhealing', {{rows}})">Self Healing</button><br>
     </div>
     <div>
         <table id="scores" class="content-table">
@@ -95,8 +95,14 @@
     </div>
 </body>
 <script>
-    function selectColumn(column) {
-        console.log(column)
+    function selectColumn(column, rows) {
+        tds = document.getElementsByClassName("data-column");
+        console.log(tds[0]);
+		for (let i = 0; i < rows[column].length; i++) {
+		    for (let j = 0; j < 3; j++) {
+		        tds[i].innerHTML = rows[column][i][j];
+            }
+		}
     }
 </script>
 </html>
