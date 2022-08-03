@@ -97,11 +97,9 @@
 <script>
     function selectColumn(column, rows) {
         tds = document.getElementsByClassName("data-column");
-        console.log(tds[0]);
-		for (let i = 0; i < rows[column].length; i++) {
-		    for (let j = 0; j < 3; j++) {
-		        tds[i].innerHTML = rows[column][i][j];
-            }
+        values = rows[column].flat();
+		for (let i = 0; i < tds.length; i++) {
+            tds[i].innerHTML = values[i];
 		}
     }
 </script>
