@@ -18,7 +18,6 @@ modes = {
     "451":   "Conquest Ranked",
     "10193": "Under 30 Conquest",
     "10197": "Under 30 Joust",
-    "459":   "Siege",
     "450":   "Joust Ranked",
     "10189": "Slash",
     "440":   "Duel Ranked"
@@ -208,7 +207,7 @@ def scoreboard():
         for player in enabledplayers:
             tableindb = player + "_" + mode
             for i in range(len(columns)):
-                top = gettopvalue(tableindb, columns[i])
+                top = gettop(tableindb, columns[i])
                 entry = [player, modes[mode], top[0], 0, 0, 0, 0, 0, 0]
                 entry[i+3] = top[1]
                 for i in range(len(entry)):
@@ -219,22 +218,31 @@ def scoreboard():
 @application.route("/conquest", methods=["POST", "GET"])
 def conquest():
     tableheaders = []
-    mode = "426"
-    column = "damage"
-    rows = []
+    columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
+    damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
+    rows = {
+        "damage": damage,
+        "mitigated": mitigated,
+        "kills": kills,
+        "assists": assists,
+        "healing": healing,
+        "selfhealing": selfhealing,
+    }
     gods = []
     for player in enabledplayers:
         tableheaders.append(player)
     for godtuple in getgodsdb():
         god = godtuple[0]
         gods.append(god)
-        entry = []
         if "'" in god:
-            god = god.replace("'", "''") # double up any apostrophes for SQL
-        for player in enabledplayers:
-            topvalue = gettopforgod(player + "_" + mode, column, god)
-            entry.append(topvalue)
-        rows.append(entry)
-    if len(gods) != len(rows):
+            god = god.replace("'", "''")  # double up any apostrophes for SQL
+        for column in columns:
+            mode = "426"
+            entry = []
+            for player in enabledplayers:
+                topvalue = gettopforgod(player + "_" + mode, column, god)
+                entry.append(topvalue)
+            rows[column].append(entry)
+    if len(gods) != len(rows["damage"]):
         print("Different amount of rows for gods and records.")
     return render_template("conquest.html", tableheaders=tableheaders, gods=gods, rows=rows, len=len)

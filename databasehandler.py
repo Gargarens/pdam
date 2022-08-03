@@ -90,7 +90,7 @@ def getgodsdb():
     return fetchsql(sql)
 
 
-def gettopvalue(table, column):
+def gettop(table, column):
     sql = "SELECT MAX(" + column + ") FROM " + table
     maxvalue = fetchsql(sql)[0][0]
     sql = "SELECT god, " + column + " FROM " + table + " WHERE " + column + "=" + str(maxvalue)

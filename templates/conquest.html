@@ -73,10 +73,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(len(rows)) %}
+                {% for i in range(len(rows["damage"])) %}
                     <tr>
                         <td class="god-column">{{gods[i]}}</td>
-                        {% for value in rows[i] %}
+                        {% for value in rows["damage"][i] %}
                             <td class="data-column">{{value}}</td>
                         {% endfor %}
                     </tr>
