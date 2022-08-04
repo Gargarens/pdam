@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Puff Daddy Continental</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
 <style>
@@ -63,6 +64,14 @@
 <body>
     <h1 id="lol">Conquest leaderboard</h1>
     <div>
+        <button type="button" onclick="selectColumn('damage', {{tables['435']}})">Player Damage</button><br>
+        <button type="button" onclick="selectColumn('mitigated', {{tables['435']}})">Mitigation</button><br>
+        <button type="button" onclick="selectColumn('kills', {{tables['435']}})">Kills</button><br>
+        <button type="button" onclick="selectColumn('assists', {{tables['435']}})">Assists</button><br>
+        <button type="button" onclick="selectColumn('healing', {{tables['435']}})">Healing</button><br>
+        <button type="button" onclick="selectColumn('selfhealing', {{tables['435']}})">Self Healing</button><br>
+    </div>
+    <div>
         <table id="scores" class="content-table">
             <thead>
                 <tr>
@@ -73,10 +82,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(len(rows["damage"])) %}
+                {% for i in range(len(tables['435']["damage"])) %}
                     <tr>
                         <td class="god-column">{{gods[i]}}</td>
-                        {% for value in rows["damage"][i] %}
+                        {% for value in tables['435']["damage"][i] %}
                             <td class="data-column">{{value}}</td>
                         {% endfor %}
                     </tr>
@@ -85,4 +94,26 @@
         </table>
     </div>
 </body>
+<script>
+    function selectColumn(column, rows) {
+        tds = document.getElementsByClassName("data-column");
+        values = rows[column].flat();
+		for (let i = 0; i < tds.length; i++) {
+            tds[i].innerHTML = values[i];
+            tds[i].style.fontWeight = "normal";
+            if (i % 3 == 2) {
+                biggest = tds[i];
+                if (tds[i-1].innerHTML > tds[i].innerHTML) {
+                    biggest = tds[i-1];
+                    if (tds[i-2].innerHTML > tds[i-1].innerHTML) {
+                        biggest = tds[i-2];
+                    }
+                } else if (tds[i-2].innerHTML > tds[i].innerHTML) {
+                    biggest = tds[i-2];
+                }
+                biggest.style.fontWeight = "bold";
+            }
+		}
+    }
+</script>
 </html>
