@@ -64,6 +64,19 @@
 <body>
     <h1 id="lol">Conquest leaderboard</h1>
     <div>
+        <button class="mode-button" onclick="selectMode('435', {{tables}})">Arena</button>
+        <button class="mode-button" onclick="selectMode('426', {{tables}})">Conquest</button>
+        <button class="mode-button" onclick="selectMode('448', {{tables}})">Joust</button>
+        <button class="mode-button" onclick="selectMode('445', {{tables}})">Assault</button>
+        <button class="mode-button" onclick="selectMode('10189', {{tables}})">Slash</button>
+        <button class="mode-button" onclick="selectMode('451', {{tables}})">Conquest Ranked</button>
+        <button class="mode-button" onclick="selectMode('450', {{tables}})">Joust Ranked</button>
+        <button class="mode-button" onclick="selectMode('440', {{tables}})">Duel Ranked</button>
+        <button class="mode-button" onclick="selectMode('10195', {{tables}})">Under 30 Arena</button>
+        <button class="mode-button" onclick="selectMode('10193', {{tables}})">Under 30 Conquest</button>
+        <button class="mode-button" onclick="selectMode('10197', {{tables}})">Under 30 Joust</button>
+    </div>
+    <div>
         <button type="button" onclick="selectColumn('damage', {{tables['435']}})">Player Damage</button><br>
         <button type="button" onclick="selectColumn('mitigated', {{tables['435']}})">Mitigation</button><br>
         <button type="button" onclick="selectColumn('kills', {{tables['435']}})">Kills</button><br>
@@ -95,7 +108,9 @@
     </div>
 </body>
 <script>
+    var selectedColumn = 'damage';
     function selectColumn(column, rows) {
+        selectedColumn = column;
         tds = document.getElementsByClassName("data-column");
         values = rows[column].flat();
 		for (let i = 0; i < tds.length; i++) {
@@ -114,6 +129,9 @@
                 biggest.style.fontWeight = "bold";
             }
 		}
+    }
+    function selectMode(mode, tables) {
+        selectColumn(selectedColumn, tables[mode]);
     }
 </script>
 </html>
