@@ -217,32 +217,36 @@ def scoreboard():
 
 @application.route("/conquest", methods=["POST", "GET"])
 def conquest():
-    tableheaders = []
     columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
-    damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
-    rows = {
-        "damage": damage,
-        "mitigated": mitigated,
-        "kills": kills,
-        "assists": assists,
-        "healing": healing,
-        "selfhealing": selfhealing,
-    }
+    data = {}
+    tables = {}
     gods = []
-    for player in enabledplayers:
-        tableheaders.append(player)
     for godtuple in getgodsdb():
         god = godtuple[0]
         gods.append(god)
-        if "'" in god:
-            god = god.replace("'", "''")  # double up any apostrophes for SQL
-        for column in columns:
-            mode = "426"
-            entry = []
-            for player in enabledplayers:
-                topvalue = gettopforgod(player + "_" + mode, column, god)
-                entry.append(topvalue)
-            rows[column].append(entry)
-    if len(gods) != len(rows["damage"]):
-        print("Different amount of rows for gods and records.")
-    return render_template("conquest.html", tableheaders=tableheaders, gods=gods, rows=rows, len=len)
+    for mode in modes:
+        data[mode] = {}
+        for player in enabledplayers:
+            table = player + "_" + mode
+            res = getdata(table)
+            data[mode][player] = res
+
+    for mode in modes:
+        damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
+        rows = {
+            "damage": damage,
+            "mitigated": mitigated,
+            "kills": kills,
+            "assists": assists,
+            "healing": healing,
+            "selfhealing": selfhealing,
+        }
+        for j in range(len(gods)):
+            for i in range(len(columns)):
+                entry = []
+                for player in enabledplayers:
+                    entry.append(data[mode][player][j][i+1])
+                rows[columns[i]].append(entry)
+        tables[mode] = rows
+
+    return render_template("conquest.html", tableheaders=enabledplayers, gods=gods, tables=tables, len=len)

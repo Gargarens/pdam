@@ -102,3 +102,10 @@ def gettopforgod(table, column, god):
     sql = "SELECT " + column + " FROM " + table + " WHERE god = '" + god + "'"
     result = fetchsql(sql)[0][0]
     return result
+
+
+def getdata(table):
+    # sql = "SELECT damage, mitigated, kills, assists, healing, selfhealing FROM " + table
+    sql = "SELECT * FROM " + table
+    result = fetchsql(sql)
+    return result

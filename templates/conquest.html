@@ -64,12 +64,12 @@
 <body>
     <h1 id="lol">Conquest leaderboard</h1>
     <div>
-        <button type="button" onclick="selectColumn('damage', {{rows}})">Player Damage</button><br>
-        <button type="button" onclick="selectColumn('mitigated', {{rows}})">Mitigation</button><br>
-        <button type="button" onclick="selectColumn('kills', {{rows}})">Kills</button><br>
-        <button type="button" onclick="selectColumn('assists', {{rows}})">Assists</button><br>
-        <button type="button" onclick="selectColumn('healing', {{rows}})">Healing</button><br>
-        <button type="button" onclick="selectColumn('selfhealing', {{rows}})">Self Healing</button><br>
+        <button type="button" onclick="selectColumn('damage', {{tables['435']}})">Player Damage</button><br>
+        <button type="button" onclick="selectColumn('mitigated', {{tables['435']}})">Mitigation</button><br>
+        <button type="button" onclick="selectColumn('kills', {{tables['435']}})">Kills</button><br>
+        <button type="button" onclick="selectColumn('assists', {{tables['435']}})">Assists</button><br>
+        <button type="button" onclick="selectColumn('healing', {{tables['435']}})">Healing</button><br>
+        <button type="button" onclick="selectColumn('selfhealing', {{tables['435']}})">Self Healing</button><br>
     </div>
     <div>
         <table id="scores" class="content-table">
@@ -82,10 +82,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(len(rows["damage"])) %}
+                {% for i in range(len(tables['435']["damage"])) %}
                     <tr>
                         <td class="god-column">{{gods[i]}}</td>
-                        {% for value in rows["damage"][i] %}
+                        {% for value in tables['435']["damage"][i] %}
                             <td class="data-column">{{value}}</td>
                         {% endfor %}
                     </tr>
