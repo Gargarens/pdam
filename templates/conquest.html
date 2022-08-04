@@ -100,6 +100,19 @@
         values = rows[column].flat();
 		for (let i = 0; i < tds.length; i++) {
             tds[i].innerHTML = values[i];
+            tds[i].style.fontWeight = "normal";
+            if (i % 3 == 2) {
+                biggest = tds[i];
+                if (tds[i-1].innerHTML > tds[i].innerHTML) {
+                    biggest = tds[i-1];
+                    if (tds[i-2].innerHTML > tds[i-1].innerHTML) {
+                        biggest = tds[i-2];
+                    }
+                } else if (tds[i-2].innerHTML > tds[i].innerHTML) {
+                    biggest = tds[i-2];
+                }
+                biggest.style.fontWeight = "bold";
+            }
 		}
     }
 </script>
