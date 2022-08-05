@@ -58,21 +58,33 @@
         text-align: right;
     }
 
-    #mode-select-list {
+    ul {
         list-style-type: none;
         margin: 0;
         padding: 0;
-        width: 200px;
-        background-color: #232323;
-        border: 1px solid #555555;
+        width: 100%;
+        position: fixed;
+        overflow: auto;
     }
 
+    #mode-select-list {
+        top: 0;
+    }
+
+    #column-select-list {
+        top: 36px;
+    }
+
+
     li a {
+        background-color: #232323;
+        float: left;
         display: block;
         color: #adadad;
         padding: 8px 16px;
         text-decoration: none;
-        border-bottom: 1px solid #555555;
+        border: 1px solid #555555;
+        text-align: center;
     }
 
     li a:hover {
@@ -105,16 +117,17 @@
         <li><a class="mode-a" onclick="selectMode('10193', {{tables}})">Under 30 Conquest</a></li>
         <li><a class="mode-a" onclick="selectMode('10197', {{tables}})">Under 30 Joust</a></li>
     </ul>
-    <br>
+    <br><br>
+    <ul id="column-select-list">
+        <li><a class="column-a" onclick="selectColumn('damage', {{rows}})">Player Damage</a></li>
+        <li><a class="column-a" onclick="selectColumn('mitigated', {{rows}})">Mitigation</a></li>
+        <li><a class="column-a" onclick="selectColumn('kills', {{rows}})">Kills</a></li>
+        <li><a class="column-a" onclick="selectColumn('assists', {{rows}})">Assists</a></li>
+        <li><a class="column-a" onclick="selectColumn('healing', {{rows}})">Healing</a></li>
+        <li><a class="column-a" onclick="selectColumn('selfhealing', {{rows}})">Self Healing</a></li>
+    </ul>
     <div>
-        <button type="button" onclick="selectColumn('damage', {{rows}})">Player Damage</button><br>
-        <button type="button" onclick="selectColumn('mitigated', {{rows}})">Mitigation</button><br>
-        <button type="button" onclick="selectColumn('kills', {{rows}})">Kills</button><br>
-        <button type="button" onclick="selectColumn('assists', {{rows}})">Assists</button><br>
-        <button type="button" onclick="selectColumn('healing', {{rows}})">Healing</button><br>
-        <button type="button" onclick="selectColumn('selfhealing', {{rows}})">Self Healing</button><br>
-    </div>
-    <div>
+        <br><br>
         <table id="scores" class="content-table">
             <thead>
                 <tr>
