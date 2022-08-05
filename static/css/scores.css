@@ -18,6 +18,11 @@ nav {
 .mode-links li {
     list-style: none;
     border: 1px solid #2d2d2d;
+    border-top: none;
+    border-right: none;
+}
+.mode-links li:last-child {
+    border-right: 1px solid #2d2d2d;
 }
 .mode-links a {
     padding: 1px 5px;
@@ -33,3 +38,13 @@ nav {
     color: #5560E0;
     cursor: pointer;
 }
+.burger {
+    display: none;
+}
+.burger div {
+    width: 25px;
+    height: 3px;
+    background-color: #202ECC;
+    margin: 5px;
+}
+
