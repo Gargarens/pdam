@@ -4,36 +4,88 @@
     <meta charset="UTF-8">
     <title>Puff Daddy Continental</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
+<style>
+    .content-table {
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 0.9em;
+        max-width: 70%;
+        min-width: 600px;
+        border-radius: 5px 5px 0 0;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .content-table thead tr {
+        background-color: #909090;
+        text-align: left;
+        font-weight: bold;
+    }
+
+    .content-table th,
+    .content-table td {
+        padding: 8px 15px;
+    }
+
+    .content-table tbody tr {
+        border-bottom: 1px solid #303030;
+    }
+
+    .content-table tbody tr:nth-of-type(even) {
+        background-color: #c0c0c0;
+    }
+
+    .content-table tbody tr:last-of-type {
+        border-bottom: 2px solid #303030;
+    }
+
+    .god-column {
+        text-align: left;
+    }
+
+    .data-column {
+        text-align: right;
+    }
+
+    .god-header {
+        text-align: left;
+    }
+
+    .data-header {
+        text-align: right;
+    }
+
+
+</style>
+
 <body>
-    <ul id="mode-select-list">
-        <li><a class="mode-a" onclick="selectMode('435', {{tables}})">Arena</a></li>
-        <li><a class="mode-a" onclick="selectMode('426', {{tables}})">Conquest</a></li>
-        <li><a class="mode-a" onclick="selectMode('448', {{tables}})">Joust</a></li>
-        <li><a class="mode-a" onclick="selectMode('445', {{tables}})">Assault</a></li>
-        <li><a class="mode-a" onclick="selectMode('10189', {{tables}})">Slash</a></li>
-        <li><a class="mode-a" onclick="selectMode('451', {{tables}})">Conquest Ranked</a></li>
-        <li><a class="mode-a" onclick="selectMode('450', {{tables}})">Joust Ranked</a></li>
-        <li><a class="mode-a" onclick="selectMode('440', {{tables}})">Duel Ranked</a></li>
-        <li><a class="mode-a" onclick="selectMode('10195', {{tables}})">Under 30 Arena</a></li>
-        <li><a class="mode-a" onclick="selectMode('10193', {{tables}})">Under 30 Conquest</a></li>
-        <li><a class="mode-a" onclick="selectMode('10197', {{tables}})">Under 30 Joust</a></li>
-    </ul>
-    <br><br>
-    <ul id="column-select-list">
-        <li><a class="column-a" onclick="selectColumn('damage', {{rows}})">Player Damage</a></li>
-        <li><a class="column-a" onclick="selectColumn('mitigated', {{rows}})">Mitigation</a></li>
-        <li><a class="column-a" onclick="selectColumn('kills', {{rows}})">Kills</a></li>
-        <li><a class="column-a" onclick="selectColumn('assists', {{rows}})">Assists</a></li>
-        <li><a class="column-a" onclick="selectColumn('healing', {{rows}})">Healing</a></li>
-        <li><a class="column-a" onclick="selectColumn('selfhealing', {{rows}})">Self Healing</a></li>
-    </ul>
+    <h1 id="lol">Conquest leaderboard</h1>
     <div>
-        <br><br>
-        <table id="scores" class="content-table" style="margin:auto">
+        <button class="mode-button" onclick="selectMode('435', {{tables}})">Arena</button>
+        <button class="mode-button" onclick="selectMode('426', {{tables}})">Conquest</button>
+        <button class="mode-button" onclick="selectMode('448', {{tables}})">Joust</button>
+        <button class="mode-button" onclick="selectMode('445', {{tables}})">Assault</button>
+        <button class="mode-button" onclick="selectMode('10189', {{tables}})">Slash</button>
+        <button class="mode-button" onclick="selectMode('451', {{tables}})">Conquest Ranked</button>
+        <button class="mode-button" onclick="selectMode('450', {{tables}})">Joust Ranked</button>
+        <button class="mode-button" onclick="selectMode('440', {{tables}})">Duel Ranked</button>
+        <button class="mode-button" onclick="selectMode('10195', {{tables}})">Under 30 Arena</button>
+        <button class="mode-button" onclick="selectMode('10193', {{tables}})">Under 30 Conquest</button>
+        <button class="mode-button" onclick="selectMode('10197', {{tables}})">Under 30 Joust</button>
+    </div>
+    <div>
+        <button type="button" onclick="selectColumn('damage', {{tables['435']}})">Player Damage</button><br>
+        <button type="button" onclick="selectColumn('mitigated', {{tables['435']}})">Mitigation</button><br>
+        <button type="button" onclick="selectColumn('kills', {{tables['435']}})">Kills</button><br>
+        <button type="button" onclick="selectColumn('assists', {{tables['435']}})">Assists</button><br>
+        <button type="button" onclick="selectColumn('healing', {{tables['435']}})">Healing</button><br>
+        <button type="button" onclick="selectColumn('selfhealing', {{tables['435']}})">Self Healing</button><br>
+    </div>
+    <div>
+        <table id="scores" class="content-table">
             <thead>
                 <tr>
                     <th class="god-header">God</th>
@@ -43,10 +95,10 @@
                 </tr>
             </thead>
             <tbody>
-                {% for i in range(len(rows["damage"])) %}
+                {% for i in range(len(tables['435']["damage"])) %}
                     <tr>
                         <td class="god-column">{{gods[i]}}</td>
-                        {% for value in rows["damage"][i] %}
+                        {% for value in tables['435']["damage"][i] %}
                             <td class="data-column">{{value}}</td>
                         {% endfor %}
                     </tr>
