@@ -215,8 +215,8 @@ def scoreboard():
     return render_template("scoreboard.html", table=table, len=len)
 
 
-@application.route("/conquest", methods=["POST", "GET"])
-def conquest():
+@application.route("/scores", methods=["POST", "GET"])
+def scores():
     columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
     data = {}
     tables = {}
@@ -249,4 +249,4 @@ def conquest():
                 rows[columns[i]].append(entry)
         tables[mode] = rows
 
-    return render_template("conquest.html", tableheaders=enabledplayers, gods=gods, tables=tables, len=len)
+    return render_template("scores.html", tableheaders=enabledplayers, gods=gods, tables=tables, len=len)
