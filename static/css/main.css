@@ -29,13 +29,98 @@ input:focus {
     outline: none;
 }
 
-#player {
-    background-color: palevioletred;
-    color: white;
-    width: 200px;
+.content-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    max-width: 70%;
+    min-width: 600px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
 }
 
-#player:hover {
-    background-color: mediumvioletred;
-    cursor: pointer;
+.content-table thead tr {
+    background-color: #909090;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 8px 15px;
+    width: 84px;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #303030;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #c0c0c0;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #303030;
+}
+
+.god-column {
+    border-right: 1px;
+    width: 66px;
+    text-align: left;
+}
+
+.data-column {
+    text-align: right;
+}
+
+.god-header {
+    text-align: left;
+}
+
+.data-header {
+    text-align: right;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    position: fixed;
+    overflow: auto;
+}
+
+#mode-select-list {
+    top: 0;
+}
+
+#column-select-list {
+<!--        top: 36px;-->
+}
+
+
+li a {
+    background-color: #232323;
+    float: left;
+    display: block;
+    color: #adadad;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #555555;
+    text-align: center;
+}
+
+li a:hover {
+    background-color: #555555;
+    color: #ffffff;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+.active-mode {
+    background-color: #6daa04;
+    color: #ffffff;
 }
