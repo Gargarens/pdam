@@ -66,6 +66,7 @@ input:focus {
 .god-column {
     border-right: 1px;
     text-align: left;
+    letter-spacing: -2px;
 }
 
 .data-column {

@@ -56,7 +56,9 @@
     </div>
 </body>
 <script>
+    var selectedColumn = 'damage';
     function selectColumn(column, rows) {
+        selectedColumn = column;
         tds = document.getElementsByClassName("data-column");
         values = rows[column].flat();
 		for (let i = 0; i < tds.length; i++) {
@@ -75,6 +77,9 @@
                 biggest.style.fontWeight = "bold";
             }
 		}
+    }
+    function selectMode(mode, tables) {
+        selectColumn(selectedColumn, tables[mode]);
     }
 </script>
 </html>
