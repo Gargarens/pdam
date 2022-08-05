@@ -58,11 +58,54 @@
         text-align: right;
     }
 
+    #mode-select-list {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        width: 200px;
+        background-color: #232323;
+        border: 1px solid #555555;
+    }
+
+    li a {
+        display: block;
+        color: #adadad;
+        padding: 8px 16px;
+        text-decoration: none;
+        border-bottom: 1px solid #555555;
+    }
+
+    li a:hover {
+        background-color: #555555;
+        color: #ffffff;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    .active-mode {
+        background-color: #6daa04;
+        color: #ffffff;
+    }
 
 </style>
 
 <body>
-    <h1 id="lol">Conquest leaderboard</h1>
+    <ul id="mode-select-list">
+        <li><a class="mode-a" onclick="selectMode('435', {{tables}})">Arena</a></li>
+        <li><a class="mode-a" onclick="selectMode('426', {{tables}})">Conquest</a></li>
+        <li><a class="mode-a" onclick="selectMode('448', {{tables}})">Joust</a></li>
+        <li><a class="mode-a" onclick="selectMode('445', {{tables}})">Assault</a></li>
+        <li><a class="mode-a" onclick="selectMode('10189', {{tables}})">Slash</a></li>
+        <li><a class="mode-a" onclick="selectMode('451', {{tables}})">Conquest Ranked</a></li>
+        <li><a class="mode-a" onclick="selectMode('450', {{tables}})">Joust Ranked</a></li>
+        <li><a class="mode-a" onclick="selectMode('440', {{tables}})">Duel Ranked</a></li>
+        <li><a class="mode-a" onclick="selectMode('10195', {{tables}})">Under 30 Arena</a></li>
+        <li><a class="mode-a" onclick="selectMode('10193', {{tables}})">Under 30 Conquest</a></li>
+        <li><a class="mode-a" onclick="selectMode('10197', {{tables}})">Under 30 Joust</a></li>
+    </ul>
+    <br>
     <div>
         <button type="button" onclick="selectColumn('damage', {{rows}})">Player Damage</button><br>
         <button type="button" onclick="selectColumn('mitigated', {{rows}})">Mitigation</button><br>
