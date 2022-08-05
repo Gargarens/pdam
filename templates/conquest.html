@@ -11,41 +11,39 @@
 <body>
     <div>
         <nav>
-            <ul class="mode-links">
-                <li><a onclick="selectMode('435', {{tables}})">Arena</a></li>
-                <li><a onclick="selectMode('426', {{tables}})">Conquest</a></li>
-                <li><a onclick="selectMode('448', {{tables}})">Joust</a></li>
-                <li><a onclick="selectMode('445', {{tables}})">Assault</a></li>
-                <li><a onclick="selectMode('10189', {{tables}})">Slash</a></li>
-            </ul>
-        </nav>
-        <nav>
-            <ul class="mode-links">
-                <li><a onclick="selectMode('451', {{tables}})">Conquest Ranked</a></li>
-                <li><a onclick="selectMode('450', {{tables}})">Joust Ranked</a></li>
-                <li><a onclick="selectMode('440', {{tables}})">Duel Ranked</a></li>
-            </ul>
+            <div class="dropdown">
+                <button class="dropbutton">Mode</button>
+                <div class="dropdown-content">
+                    <a onclick="selectMode('435', {{tables}})">Arena</a>
+                    <a onclick="selectMode('426', {{tables}})">Conquest</a>
+                    <a onclick="selectMode('448', {{tables}})">Joust</a>
+                    <a onclick="selectMode('445', {{tables}})">Assault</a>
+                    <a onclick="selectMode('10189', {{tables}})">Slash</a>
+                    <a onclick="selectMode('451', {{tables}})">Conquest Ranked</a>
+                    <a onclick="selectMode('450', {{tables}})">Joust Ranked</a>
+                    <a onclick="selectMode('440', {{tables}})">Duel Ranked</a>
+                    <a onclick="selectMode('10195', {{tables}})">Arena <30</a>
+                    <a onclick="selectMode('10193', {{tables}})">Conquest <30</a>
+                    <a onclick="selectMode('10197', {{tables}})">Joust <30</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbutton">Type</button>
+                <div class="dropdown-content">
+                    <a onclick="selectColumn('damage', {{tables['435']}})">Player Damage</a>
+                    <a onclick="selectColumn('mitigated', {{tables['435']}})">Mitigation</a>
+                    <a onclick="selectColumn('kills', {{tables['435']}})">Kills</a>
+                    <a onclick="selectColumn('assists', {{tables['435']}})">Assists</a>
+                    <a onclick="selectColumn('healing', {{tables['435']}})">Healing</a>
+                    <a onclick="selectColumn('selfhealing', {{tables['435']}})">Self Healing</a>
+                </div>
+            </div>
             <div class="burger">
                 <div class="line1"></div>
                 <div class="line2"></div>
                 <div class="line3"></div>
             </div>
         </nav>
-        <nav>
-            <ul class="mode-links">
-                <li><a onclick="selectMode('10195', {{tables}})">Arena <30</a></li>
-                <li><a onclick="selectMode('10193', {{tables}})">Conquest <30</a></li>
-                <li><a onclick="selectMode('10197', {{tables}})">Joust <30</a></li>
-            </ul>
-        </nav>
-    </div>
-    <div>
-        <button type="button" onclick="selectColumn('damage', {{tables['435']}})">Player Damage</button><br>
-        <button type="button" onclick="selectColumn('mitigated', {{tables['435']}})">Mitigation</button><br>
-        <button type="button" onclick="selectColumn('kills', {{tables['435']}})">Kills</button><br>
-        <button type="button" onclick="selectColumn('assists', {{tables['435']}})">Assists</button><br>
-        <button type="button" onclick="selectColumn('healing', {{tables['435']}})">Healing</button><br>
-        <button type="button" onclick="selectColumn('selfhealing', {{tables['435']}})">Self Healing</button><br>
     </div>
     <div>
         <table id="scores" class="content-table">
