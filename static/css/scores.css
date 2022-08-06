@@ -67,8 +67,6 @@ nav {
     margin: 5px;
 }
 
-
-
 @media screen and (max-width: 768px) {
     nav {
         height: 3vh;
