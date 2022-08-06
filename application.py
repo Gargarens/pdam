@@ -190,31 +190,6 @@ def update():
     return render_template("update.html")
 
 
-@application.route("/scoreboard", methods=["POST", "GET"])
-def scoreboard():
-    name = []
-    queue = []
-    god = []
-    damage = []
-    mitigated = []
-    kills = []
-    assists = []
-    healing = []
-    selfhealing = []
-    table = [name, queue, god, damage, mitigated, kills, assists, healing, selfhealing]
-    columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
-    for mode in modekeys:
-        for player in enabledplayers:
-            tableindb = player + "_" + mode
-            for i in range(len(columns)):
-                top = gettop(tableindb, columns[i])
-                entry = [player, modes[mode], top[0], 0, 0, 0, 0, 0, 0]
-                entry[i+3] = top[1]
-                for i in range(len(entry)):
-                    table[i].append(entry[i])
-    return render_template("scoreboard.html", table=table, len=len)
-
-
 @application.route("/scores", methods=["POST", "GET"])
 def scores():
     columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
@@ -250,3 +225,6 @@ def scores():
         tables[mode] = rows
 
     return render_template("scores.html", tableheaders=enabledplayers, gods=gods, tables=tables, len=len)
+
+if __name__ == "__main__":
+    application.run()
