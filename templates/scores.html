@@ -9,7 +9,7 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
-<body>
+<body onload="selectMode('435', {{tables}})">
     <div>
         <nav>
             <div class="dropdown">
@@ -82,7 +82,6 @@
 <script>
     var selectedColumn = 'damage';
     var selectedRoles = ['assassin', 'guardian', 'hunter', 'mage', 'warrior'];
-    var str426 = "426";
     var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
         451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
         10189: "Slash", 440: "Duel Ranked"};

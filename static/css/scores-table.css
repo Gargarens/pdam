@@ -35,7 +35,7 @@ body {
 .content-table th,
 .content-table td {
     padding: 3px 8px 2px 5px;
-    width: 150px;
+    max-width: 120px;
 }
 .god-header {
     text-align: left;
