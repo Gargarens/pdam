@@ -14,21 +14,24 @@ body {
     background-color: #0d1117;
 }
 .tabdiv {
+    margin-top: 80px;
     max-height: 600px;
     overflow: auto;
 }
 .content-table {
+    border-radius: 5px 5px 0 0;
     border-collapse: collapse;
     margin: auto;
     font-size: 0.9em;
     max-width: 80%;
-    border-radius: 5px 5px 0 0;
-    overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
     background-color: #161b22;
     color: #8b949e;
-    margin-top: 80px;
-    margin-bottom: 800px;
+    margin-bottom: 400px;
+}
+.content-table thead {
+    top: 0;
+    position: sticky;
 }
 .content-table thead tr {
     font-weight: bold;
