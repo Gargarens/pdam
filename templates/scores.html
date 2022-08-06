@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Puff Daddy Continental</title>
-    <link rel="stylesheet" href="{{url_for('static', filename='css/scores.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/scores-nav.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/scores-table.css')}}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
@@ -57,8 +58,8 @@
     </div>
     <div>
         <table id="scores" class="content-table">
-            <thead>
-                <tr>
+            <thead class="header">
+                <tr class="header-row">
                     <th class="god-header">God</th>
                     {% for header in tableheaders %}
                         <th class="data-header">{{header}}</th>
@@ -82,19 +83,10 @@
     var selectedColumn = 'damage';
     var selectedRoles = ['assassin', 'guardian', 'hunter', 'mage', 'warrior'];
     var str426 = "426";
-    var modes = {
-        426: "Conquest",
-        435: "Arena",
-        448: "Joust",
-        445: "Assault",
-        10195: "Under 30 Arena",
-        451: "Conquest Ranked",
-        10193: "Under 30 Conquest",
-        10197: "Under 30 Joust",
-        450: "Joust Ranked",
-        10189: "Slash",
-        440: "Duel Ranked"
-    };
+    var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
+        451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
+        10189: "Slash", 440: "Duel Ranked"};
+
     function selectColumn(column, rows) {
         document.getElementById("column-select-button").innerHTML = column.replace(/^\w/, (c) => c.toUpperCase());
         selectedColumn = column;
@@ -102,7 +94,7 @@
         values = rows[column].flat();
 		for (let i = 0; i < tds.length; i++) {
             tds[i].innerHTML = values[i];
-            tds[i].style.fontWeight = "normal";
+            tds[i].style.textDecoration = "none";
             if (i % 3 == 2) {
                 biggest = tds[i];
                 if (tds[i-1].innerHTML > tds[i].innerHTML) {
@@ -113,7 +105,7 @@
                 } else if (tds[i-2].innerHTML > tds[i].innerHTML) {
                     biggest = tds[i-2];
                 }
-                biggest.style.fontWeight = "bold";
+                biggest.style.textDecoration = "underline";
             }
 		}
     }

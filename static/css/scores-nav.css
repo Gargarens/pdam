@@ -15,7 +15,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background-color: #0d1117;
+    font-family: 'Roboto', sans-serif;
 }
 nav {
     display: flex;
@@ -23,7 +23,6 @@ nav {
     align-items: center;
     min-height: 5vh;
     background-color: #161b22;
-    font-family: 'Roboto', sans-serif;
 }
 .dropdown-content {
     display: none;
