@@ -18,11 +18,14 @@
     font-family: 'Roboto', sans-serif;
 }
 nav {
+    width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
     min-height: 5vh;
     background-color: #161b22;
+    top: 0;
+    position: fixed;
 }
 .dropdown-content {
     display: none;
@@ -36,6 +39,8 @@ nav {
 }
 .dropdown:hover .dropdown-content {
     display: block;
+    width: 160px;
+    margin: 0 2px 0 2px;
 }
 .dropdown-content a {
     color: #b1bac4;
@@ -55,6 +60,8 @@ nav {
   font-size: 16px;
   border: none;
   cursor: pointer;
+  width: 160px;
+  margin: 0 2px 0 2px;
 }
 .burger {
     display: none;
