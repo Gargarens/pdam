@@ -13,6 +13,10 @@
 body {
     background-color: #0d1117;
 }
+.tabdiv {
+    max-height: 600px;
+    overflow: auto;
+}
 .content-table {
     border-collapse: collapse;
     margin: auto;
@@ -49,6 +53,10 @@ body {
 }
 .data-column {
     text-align: right;
+}
+.content-table tbody {
+    overflow-auto;
+    height: 600px;
 }
 .content-table tbody tr {
     border-bottom: 2px solid #0d1117;
