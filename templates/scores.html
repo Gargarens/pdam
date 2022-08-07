@@ -9,7 +9,7 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
-<body onload="selectMode('435', {{tables}})">
+<body onload="load({{tables}})">
     <div>
         <nav>
             <div class="dropdown">
@@ -82,15 +82,33 @@
 <script>
     var selectedColumn = 'damage';
     var selectedRoles = ['assassin', 'guardian', 'hunter', 'mage', 'warrior'];
+    var selectedMode = '435';
+    var allTables = {};
     var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
         451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
         10189: "Slash", 440: "Duel Ranked"};
 
-    function selectColumn(column, rows) {
-        document.getElementById("column-select-button").innerHTML = column.replace(/^\w/, (c) => c.toUpperCase());
+    function load(tables) {
+        allTables = tables;
+        generateTable();
+    }
+    function selectColumn(column) {
         selectedColumn = column;
+        generateTable();
+    }
+    function selectMode(mode) {
+        selectedMode = mode;
+        generateTable();
+    }
+    function selectRole(role) {
+        selectedRoles = role;
+        generateTable();
+    }
+    function generateTable() {
+        document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
+        document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
         tds = document.getElementsByClassName("data-column");
-        values = rows[column].flat();
+        values = allTables[selectedMode][selectedColumn].flat();
 		for (let i = 0; i < tds.length; i++) {
             tds[i].innerHTML = values[i];
             tds[i].style.textDecoration = "none";
@@ -109,13 +127,6 @@
                 }
             }
 		}
-    }
-    function selectMode(mode, tables) {
-        document.getElementById("mode-select-button").innerHTML = modes[mode];
-        selectColumn(selectedColumn, tables[mode]);
-    }
-    function selectRole(role) {
-        selectedRoles = role;
     }
 </script>
 </html>
