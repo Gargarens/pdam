@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Puff Daddy Continental</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/scores-nav.css')}}">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/scores-table.css')}}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+</head>
+
+<body onload="load({{tables}})">
+    <div>
+        <nav>
+            <div class="dropdown">
+                <button class="dropbutton" id="mode-select-button">Arena</button>
+                <div class="dropdown-content">
+                    <a onclick="selectMode('435', {{tables}})">Arena</a>
+                    <a onclick="selectMode('426', {{tables}})">Conquest</a>
+                    <a onclick="selectMode('448', {{tables}})">Joust</a>
+                    <a onclick="selectMode('445', {{tables}})">Assault</a>
+                    <a onclick="selectMode('10189', {{tables}})">Slash</a>
+                    <a onclick="selectMode('451', {{tables}})">Conquest Ranked</a>
+                    <a onclick="selectMode('450', {{tables}})">Joust Ranked</a>
+                    <a onclick="selectMode('440', {{tables}})">Duel Ranked</a>
+                    <a onclick="selectMode('10195', {{tables}})">Arena <30</a>
+                    <a onclick="selectMode('10193', {{tables}})">Conquest <30</a>
+                    <a onclick="selectMode('10197', {{tables}})">Joust <30</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbutton" id="column-select-button">Damage</button>
+                <div class="dropdown-content">
+                    <a onclick="selectColumn('damage', {{tables['435']}})">Damage</a>
+                    <a onclick="selectColumn('mitigated', {{tables['435']}})">Mitigated</a>
+                    <a onclick="selectColumn('kills', {{tables['435']}})">Kills</a>
+                    <a onclick="selectColumn('assists', {{tables['435']}})">Assists</a>
+                    <a onclick="selectColumn('healing', {{tables['435']}})">Healing</a>
+                    <a onclick="selectColumn('selfhealing', {{tables['435']}})">Self Healing</a>
+                </div>
+            </div>
+            <div class="dropdown">
+                <button class="dropbutton">Roles</button>
+                <div class="dropdown-content">
+                    <a onclick="selectRole()">Assassin</a>
+                    <a onclick="selectRole()">Guardian</a>
+                    <a onclick="selectRole()">Hunter</a>
+                    <a onclick="selectRole()">Mage</a>
+                    <a onclick="selectRole()">Warrior</a>
+                </div>
+            </div>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </nav>
+    </div>
+    <div class="tabdiv">
+        <table id="scores" class="content-table">
+            <thead class="header">
+                <tr class="header-row">
+                    <th class="god-header">God</th>
+                    {% for header in tableheaders %}
+                        <th class="data-header">{{header}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in range(len(tables['435']["damage"])) %}
+                    <tr>
+                        <td class="god-column">{{gods[i]}}</td>
+                        {% for value in tables['435']["damage"][i] %}
+                            <td class="data-column">{{value}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    var selectedColumn = 'damage';
+    var selectedRoles = ['assassin', 'guardian', 'hunter', 'mage', 'warrior'];
+    var selectedMode = '435';
+    var allTables = {};
+    var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
+        451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
+        10189: "Slash", 440: "Duel Ranked"};
+
+    function load(tables) {
+        allTables = tables;
+        generateTable();
+    }
+    function selectColumn(column) {
+        selectedColumn = column;
+        generateTable();
+    }
+    function selectMode(mode) {
+        selectedMode = mode;
+        generateTable();
+    }
+    function selectRole(role) {
+        selectedRoles = role;
+        generateTable();
+    }
+    function generateTable() {
+        document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
+        document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
+        tds = document.getElementsByClassName("data-column");
+        values = allTables[selectedMode][selectedColumn].flat();
+		for (let i = 0; i < tds.length; i++) {
+            tds[i].innerHTML = values[i];
+            tds[i].style.textDecoration = "none";
+            if (i % 3 == 2) {
+                biggest = tds[i];
+                if (tds[i-1].innerHTML > tds[i].innerHTML) {
+                    biggest = tds[i-1];
+                    if (tds[i-2].innerHTML > tds[i-1].innerHTML) {
+                        biggest = tds[i-2];
+                    }
+                } else if (tds[i-2].innerHTML > tds[i].innerHTML) {
+                    biggest = tds[i-2];
+                }
+                if (biggest.innerHTML != 0) {
+                    biggest.style.textDecoration = "underline";
+                }
+            }
+		}
+    }
+</script>
+</html>
