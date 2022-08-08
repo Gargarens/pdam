@@ -42,11 +42,26 @@
             <div class="dropdown">
                 <button class="dropbutton">Roles</button>
                 <div class="dropdown-content">
-                    <a onclick="selectRole({{gods}})">Assassin</a>
-                    <a onclick="selectRole({{gods}})">Guardian</a>
-                    <a onclick="selectRole({{gods}})">Hunter</a>
-                    <a onclick="selectRole({{gods}})">Mage</a>
-                    <a onclick="selectRole({{gods}})">Warrior</a>
+                    <label class="title" for="role-a">
+                        <input type="checkbox" class="cbox" id="role-a"/>
+                        <a onclick="selectRole({{gods}})">Assassin</a>
+                    </label>
+                    <label class="title" for="role-g">
+                        <input type="checkbox" class="cbox" id="role-g"/>
+                        <a onclick="selectRole({{gods}})">Guardian</a>
+                    </label>
+                    <label class="title" for="role-h">
+                        <input type="checkbox" class="cbox" id="role-h"/>
+                        <a onclick="selectRole({{gods}})">Hunter</a>
+                    </label>
+                    <label class="title" for="role-m">
+                    <input type="checkbox" class="cbox" id="role-m"/>
+                        <a onclick="selectRole({{gods}})">Mage</a>
+                    </label>
+                    <label class="title" for="role-w">
+                        <input type="checkbox" class="cbox" id="role-w"/>
+                        <a onclick="selectRole({{gods}})">Warrior</a>
+                    </label>
                 </div>
             </div>
             <div class="burger">
@@ -81,7 +96,7 @@
 </body>
 <script>
     var selectedColumn = 'damage';
-    var selectedRoles = ['Assassin', '', 'Hunter', 'Mage', 'Warrior'];
+    var selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
     var selectedMode = '435';
     var allTables = {};
     var godNames;
@@ -105,20 +120,22 @@
         generateTable();
     }
     function selectRole(gods, role) {
-        selectedRoles = role;
+        //selectedRoles = role;
         generateTable();
     }
     function generateTable() {
+        console.log(selectedRoles);
         document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
         document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
         tds = document.getElementsByClassName("data-column");
         trs = document.getElementsByClassName("data-row");
         values = allTables[selectedMode][selectedColumn].flat();
-        var j = 0;
 		for (let i = 0; i < tds.length; i++) {
 		    var row = Math.floor(i/3);
 		    if (!selectedRoles.includes(godRoles[godNames[row]])) {
-		        trs[row].style.visibility = "hidden";
+		        trs[row].style.display = "none";
+		    } else {
+		        trs[row].style.display = "table-row";
 		    }
             tds[i].innerHTML = values[i];
             tds[i].style.textDecoration = "none";

@@ -28,10 +28,11 @@ nav {
     position: fixed;
 }
 .dropdown-content {
-    display: none;
     position: absolute;
-    justify-content: space-around;
     cursor: pointer;
+    width: 160px;
+    margin: 0 2px 0 2px;
+    display: none;
 }
 .dropdown {
     position: relative;
@@ -39,8 +40,6 @@ nav {
 }
 .dropdown:hover .dropdown-content {
     display: block;
-    width: 160px;
-    margin: 0 2px 0 2px;
 }
 .dropdown-content a {
     color: #b1bac4;
