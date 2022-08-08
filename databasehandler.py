@@ -86,7 +86,7 @@ def fetchsql(sql):
 
 
 def getgodsdb():
-    sql = "select name from gods"
+    sql = "select name, role from gods"
     return fetchsql(sql)
 
 

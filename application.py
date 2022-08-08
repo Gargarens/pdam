@@ -196,9 +196,14 @@ def scores():
     data = {}
     tables = {}
     gods = []
+    roles = {}
     for godtuple in getgodsdb():
         god = godtuple[0]
+        role = godtuple[1]
+        if role == "Mage, Ranged": # Fix bug in API with Persephone role
+            role = "Mage"
         gods.append(god)
+        roles[god] = role
     for mode in modes:
         data[mode] = {}
         for player in enabledplayers:
@@ -223,8 +228,8 @@ def scores():
                     entry.append(data[mode][player][j][i+1])
                 rows[columns[i]].append(entry)
         tables[mode] = rows
+    return render_template("scores.html", tableheaders=enabledplayers, gods=gods, roles=roles, tables=tables, len=len)
 
-    return render_template("scores.html", tableheaders=enabledplayers, gods=gods, tables=tables, len=len)
 
 if __name__ == "__main__":
     application.run()

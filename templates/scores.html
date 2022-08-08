@@ -9,7 +9,7 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
-<body onload="load({{tables}})">
+<body style="color: #333333" onload="load({{gods}}, {{roles}}, {{tables}})">
     <div>
         <nav>
             <div class="dropdown">
@@ -42,11 +42,11 @@
             <div class="dropdown">
                 <button class="dropbutton">Roles</button>
                 <div class="dropdown-content">
-                    <a onclick="selectRole()">Assassin</a>
-                    <a onclick="selectRole()">Guardian</a>
-                    <a onclick="selectRole()">Hunter</a>
-                    <a onclick="selectRole()">Mage</a>
-                    <a onclick="selectRole()">Warrior</a>
+                    <a onclick="selectRole({{gods}})">Assassin</a>
+                    <a onclick="selectRole({{gods}})">Guardian</a>
+                    <a onclick="selectRole({{gods}})">Hunter</a>
+                    <a onclick="selectRole({{gods}})">Mage</a>
+                    <a onclick="selectRole({{gods}})">Warrior</a>
                 </div>
             </div>
             <div class="burger">
@@ -70,9 +70,9 @@
                 {% for i in range(len(tables['435']["damage"])) %}
                     <tr>
                         <td class="god-column">{{gods[i]}}</td>
-                        {% for value in tables['435']["damage"][i] %}
-                            <td class="data-column">{{value}}</td>
-                        {% endfor %}
+                            {% for value in tables['435']["damage"][i] %}
+                                <td class="data-column">{{value}}</td>
+                            {% endfor %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -81,14 +81,18 @@
 </body>
 <script>
     var selectedColumn = 'damage';
-    var selectedRoles = ['assassin', 'guardian', 'hunter', 'mage', 'warrior'];
+    var selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
     var selectedMode = '435';
     var allTables = {};
+    var godNames;
+    var godRoles;
     var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
         451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
         10189: "Slash", 440: "Duel Ranked"};
 
-    function load(tables) {
+    function load(gods, roles, tables) {
+        godNames = gods;
+        godRoles = roles;
         allTables = tables;
         generateTable();
     }
@@ -100,7 +104,7 @@
         selectedMode = mode;
         generateTable();
     }
-    function selectRole(role) {
+    function selectRole(gods, role) {
         selectedRoles = role;
         generateTable();
     }
@@ -109,9 +113,13 @@
         document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
         tds = document.getElementsByClassName("data-column");
         values = allTables[selectedMode][selectedColumn].flat();
+        var j = 0;
 		for (let i = 0; i < tds.length; i++) {
+		    var row = Math.floor(i/3);
+		    console.log(godNames[row] + ": " + godRoles[godNames[row]]);
             tds[i].innerHTML = values[i];
             tds[i].style.textDecoration = "none";
+
             if (i % 3 == 2) {
                 biggest = tds[i];
                 if (tds[i-1].innerHTML > tds[i].innerHTML) {
