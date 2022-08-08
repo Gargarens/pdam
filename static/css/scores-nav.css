@@ -53,14 +53,29 @@ nav {
     color: #c9d1d9;
 }
 .dropbutton {
-  background-color: #30363d;
-  color: #c9d1d9;
-  padding: 16px;
-  font-size: 16px;
-  border: none;
-  cursor: pointer;
-  width: 160px;
-  margin: 0 2px 0 2px;
+    background-color: #30363d;
+    color: #c9d1d9;
+    padding: 16px;
+    font-size: 16px;
+    border: none;
+    cursor: pointer;
+    width: 160px;
+    margin: 0 2px 0 2px;
+}
+.role-drop {
+    background-color: #21262d;
+    width: 160px;
+}
+.role-drop:hover {
+    background-color: #30363d;
+    color: #c9d1d9;
+}
+.role-drop:hover .content-table {
+    background-color: #30363d;
+    color: #c9d1d9;
+}
+.title {
+    display: flex;
 }
 .burger {
     display: none;
