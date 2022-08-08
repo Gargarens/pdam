@@ -68,7 +68,7 @@
             </thead>
             <tbody>
                 {% for i in range(len(tables['435']["damage"])) %}
-                    <tr>
+                    <tr class="data-row">
                         <td class="god-column">{{gods[i]}}</td>
                             {% for value in tables['435']["damage"][i] %}
                                 <td class="data-column">{{value}}</td>
@@ -81,7 +81,7 @@
 </body>
 <script>
     var selectedColumn = 'damage';
-    var selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
+    var selectedRoles = ['Assassin', '', 'Hunter', 'Mage', 'Warrior'];
     var selectedMode = '435';
     var allTables = {};
     var godNames;
@@ -112,11 +112,14 @@
         document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
         document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
         tds = document.getElementsByClassName("data-column");
+        trs = document.getElementsByClassName("data-row");
         values = allTables[selectedMode][selectedColumn].flat();
         var j = 0;
 		for (let i = 0; i < tds.length; i++) {
 		    var row = Math.floor(i/3);
-		    console.log(godNames[row] + ": " + godRoles[godNames[row]]);
+		    if (!selectedRoles.includes(godRoles[godNames[row]])) {
+		        trs[row].style.visibility = "hidden";
+		    }
             tds[i].innerHTML = values[i];
             tds[i].style.textDecoration = "none";
 
