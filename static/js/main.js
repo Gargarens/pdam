@@ -7,12 +7,16 @@ var godRoles;
 var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
     451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
     10189: "Slash", 440: "Duel Ranked"};
-const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+var checkboxes;
 function load(gods, roles, tables) {
     godNames = gods;
     godRoles = roles;
     allTables = tables;
-    checkboxes.forEach(checkbox => checkbox.addEventListener('click', selectRole));
+    checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = true;
+        checkbox.addEventListener('click', selectRole);
+    });
     generateTable();
 }
 function selectColumn(column) {
@@ -24,7 +28,7 @@ function selectMode(mode) {
     generateTable();
 }
 function selectRole(event) {
-    //selectedRoles = role;
+//    selectedRoles = role;
     console.log(event);
     checkboxes.forEach(checkbox => {
         console.log(checkbox.checked);
@@ -35,7 +39,7 @@ function selectAllRoles() {
 
 }
 function generateTable() {
-    console.log(selectedRoles);
+//    console.log(selectedRoles);
     document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
     document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
     tds = document.getElementsByClassName("data-column");
