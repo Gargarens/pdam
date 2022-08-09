@@ -73,7 +73,6 @@ function generateTable() {
             trs[row].style.display = "table-row";
             if (i % 3 == 2) {
                 biggest = i;
-    //            console.log(players[i%3-1]);
                 if (tds[i-1].innerHTML > tds[i].innerHTML) {
                     biggest = i-1;
                     if (tds[i-2].innerHTML > tds[i-1].innerHTML) {
@@ -100,5 +99,9 @@ function generateTable() {
     players.forEach(player => {
        document.getElementById(player + "-reigns").innerHTML = reigns[player];
     });
-    console.log(reigns);
+    if (document.getElementById('tabdiv').clientHeight >= 600) {
+        document.getElementById('reign-div').style.marginRight = "18px";
+    } else {
+        document.getElementById('reign-div').style.marginRight = "0";
+    }
 }

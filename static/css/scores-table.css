@@ -13,8 +13,8 @@
 body {
     background-color: #0d1117;
 }
-.tabdiv {
-    margin-top: 100px;
+#tabdiv {
+    margin-top: 10px;
     max-height: 600px;
     overflow: auto;
 }
@@ -22,7 +22,7 @@ body {
     border-collapse: collapse;
     margin: auto;
     font-size: 0.9em;
-    max-width: 80%;
+    max-width: 90%;
     border-radius: 5px 5px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
@@ -39,7 +39,7 @@ body {
 .content-table th,
 .content-table td {
     padding: 3px 8px 2px 5px;
-    max-width: 120px;
+    width: 120px;
 }
 .god-header {
     text-align: left;
@@ -64,6 +64,14 @@ body {
 }
 .content-table tbody tr:last-of-type {
     border-bottom: 2px solid #0d1117;
+}
+#reign-div {
+    margin-top: 100px;
+}
+.reign-td {
+    padding: 3px 8px 2px 5px;
+    text-align: center;
+    width: 120px;
 }
 
 @media screen and (max-width: 768px) {
