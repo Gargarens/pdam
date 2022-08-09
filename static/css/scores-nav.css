@@ -32,7 +32,7 @@ nav {
     cursor: pointer;
     width: 160px;
     margin: 0 2px 0 2px;
-    display: none;
+    display: block;
 }
 .dropdown {
     position: relative;
@@ -64,18 +64,29 @@ nav {
 }
 .role-drop {
     background-color: #21262d;
+    color: #b1bac4;
     width: 160px;
+    padding-left: 3px;
+}
+.role-drop a {
 }
 .role-drop:hover {
     background-color: #30363d;
     color: #c9d1d9;
 }
-.role-drop:hover .content-table {
+.role-drop:hover a {
     background-color: #30363d;
     color: #c9d1d9;
 }
+input[type=checkbox]:checked + label {
+    text-decoration: line-through;
+}
 .title {
     display: flex;
+    cursor: pointer;
+}
+.cbox {
+    cursor: pointer;
 }
 .burger {
     display: none;
