@@ -31,11 +31,12 @@ function selectMode(mode) {
     generateTable();
 }
 function selectRole(event) {
-//    selectedRoles = role;
-    console.log(event);
-    checkboxes.forEach(checkbox => {
-        console.log(checkbox.checked);
-    });
+    var role = event.path[0].id;
+    if (selectedRoles.includes(role)) {
+        selectedRoles.splice(selectedRoles.indexOf(role), 1);
+    } else {
+        selectedRoles.push(role);
+    }
     generateTable();
 }
 function selectAllRoles() {
@@ -46,9 +47,9 @@ function selectAllRoles() {
         selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
         checkboxes.forEach(checkbox => checkbox.checked = true);
     }
+    generateTable();
 }
 function generateTable() {
-//    console.log(selectedRoles);
     document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
     document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
     tds = document.getElementsByClassName("data-column");
