@@ -43,33 +43,33 @@
                 <button class="dropbutton">Roles</button>
                 <div class="dropdown-content">
                     <div class="role-drop">
-                        <label class="title" for="role-a">
+                        <label class="title" for="l">
                             <input type="checkbox" class="cbox" id="role-a"/>
-                            <a onclick="selectRole({{gods}})">Assassin</a>
+                            <a>Assassin</a>
                         </label>
                     </div>
                     <div class="role-drop">
                         <label class="title" for="role-g">
                             <input type="checkbox" class="cbox" id="role-g"/>
-                            <a onclick="selectRole({{gods}})">Guardian</a>
+                            <a>Guardian</a>
                         </label>
                     </div>
                     <div class="role-drop">
                         <label class="title" for="role-h">
                             <input type="checkbox" class="cbox" id="role-h"/>
-                            <a onclick="selectRole({{gods}})">Hunter</a>
+                            <a>Hunter</a>
                         </label>
                     </div>
                     <div class="role-drop">
                         <label class="title" for="role-m">
                         <input type="checkbox" class="cbox" id="role-m"/>
-                            <a onclick="selectRole({{gods}})">Mage</a>
+                            <a>Mage</a>
                         </label>
                     </div>
                     <div class="role-drop">
                         <label class="title" for="role-w">
                             <input type="checkbox" class="cbox" id="role-w"/>
-                            <a onclick="selectRole({{gods}})">Warrior</a>
+                            <a>Warrior</a>
                         </label>
                     </div>
                 </div>
@@ -114,11 +114,12 @@
     var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
         451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
         10189: "Slash", 440: "Duel Ranked"};
-
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
     function load(gods, roles, tables) {
         godNames = gods;
         godRoles = roles;
         allTables = tables;
+        checkboxes.forEach(checkbox => checkbox.addEventListener('click', selectRole));
         generateTable();
     }
     function selectColumn(column) {
@@ -129,8 +130,12 @@
         selectedMode = mode;
         generateTable();
     }
-    function selectRole(gods, role) {
+    function selectRole(event) {
         //selectedRoles = role;
+        console.log(event);
+        checkboxes.forEach(checkbox => {
+            console.log(checkbox.checked);
+        });
         generateTable();
     }
     function generateTable() {
