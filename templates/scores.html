@@ -5,11 +5,12 @@
     <title>Puff Daddy Continental</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/scores-nav.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='css/scores-table.css')}}">
+    <script src="/static/js/main.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
-<body onload="load({{tables}})">
+<body style="color: #333333" onload="load({{gods}}, {{roles}}, {{tables}}, {{tableheaders}})">
     <div>
         <nav>
             <div class="dropdown">
@@ -40,13 +41,41 @@
                 </div>
             </div>
             <div class="dropdown">
-                <button class="dropbutton">Roles</button>
+                <button class="dropbutton" id="role-select-button">
+                    Roles
+<!--                    <div class="small">Click to toggle all</div>-->
+                </button>
                 <div class="dropdown-content">
-                    <a onclick="selectRole()">Assassin</a>
-                    <a onclick="selectRole()">Guardian</a>
-                    <a onclick="selectRole()">Hunter</a>
-                    <a onclick="selectRole()">Mage</a>
-                    <a onclick="selectRole()">Warrior</a>
+                    <div class="role-drop">
+                        <label class="title" for="Assassin">
+                            <input type="checkbox" class="cbox" id="Assassin"/>
+                            <a>Assassin</a>
+                        </label>
+                    </div>
+                    <div class="role-drop">
+                        <label class="title" for="Guardian">
+                            <input type="checkbox" class="cbox" id="Guardian"/>
+                            <a>Guardian</a>
+                        </label>
+                    </div>
+                    <div class="role-drop">
+                        <label class="title" for="Hunter">
+                            <input type="checkbox" class="cbox" id="Hunter"/>
+                            <a>Hunter</a>
+                        </label>
+                    </div>
+                    <div class="role-drop">
+                        <label class="title" for="Mage">
+                        <input type="checkbox" class="cbox" id="Mage"/>
+                            <a>Mage</a>
+                        </label>
+                    </div>
+                    <div class="role-drop">
+                        <label class="title" for="Warrior">
+                            <input type="checkbox" class="cbox" id="Warrior"/>
+                            <a>Warrior</a>
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="burger">
@@ -56,7 +85,27 @@
             </div>
         </nav>
     </div>
-    <div class="tabdiv">
+
+    <div id="reign-div">
+        <table class="content-table">
+            <thead class="reign-header">
+                <tr class="reign-header-row">
+                    <th></th>
+                    <th>creviceguy</th>
+                    <th>Spuik</th>
+                    <th>MeatEater04</th>
+                </tr>
+            </thead>
+            <tbody>
+                <td>Reigns</td>
+                <td id="creviceguy-reigns" class="reign-td">0</td>
+                <td id="Spuik-reigns" class="reign-td">0</td>
+                <td id="MeatEater04-reigns" class="reign-td">0</td>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="tabdiv">
         <table id="scores" class="content-table">
             <thead class="header">
                 <tr class="header-row">
@@ -68,11 +117,11 @@
             </thead>
             <tbody>
                 {% for i in range(len(tables['435']["damage"])) %}
-                    <tr>
+                    <tr class="data-row">
                         <td class="god-column">{{gods[i]}}</td>
-                        {% for value in tables['435']["damage"][i] %}
-                            <td class="data-column">{{value}}</td>
-                        {% endfor %}
+                            {% for value in tables['435']["damage"][i] %}
+                                <td class="data-column">{{value}}</td>
+                            {% endfor %}
                     </tr>
                 {% endfor %}
             </tbody>
@@ -80,53 +129,6 @@
     </div>
 </body>
 <script>
-    var selectedColumn = 'damage';
-    var selectedRoles = ['assassin', 'guardian', 'hunter', 'mage', 'warrior'];
-    var selectedMode = '435';
-    var allTables = {};
-    var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195: "Under 30 Arena",
-        451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
-        10189: "Slash", 440: "Duel Ranked"};
 
-    function load(tables) {
-        allTables = tables;
-        generateTable();
-    }
-    function selectColumn(column) {
-        selectedColumn = column;
-        generateTable();
-    }
-    function selectMode(mode) {
-        selectedMode = mode;
-        generateTable();
-    }
-    function selectRole(role) {
-        selectedRoles = role;
-        generateTable();
-    }
-    function generateTable() {
-        document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
-        document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
-        tds = document.getElementsByClassName("data-column");
-        values = allTables[selectedMode][selectedColumn].flat();
-		for (let i = 0; i < tds.length; i++) {
-            tds[i].innerHTML = values[i];
-            tds[i].style.textDecoration = "none";
-            if (i % 3 == 2) {
-                biggest = tds[i];
-                if (tds[i-1].innerHTML > tds[i].innerHTML) {
-                    biggest = tds[i-1];
-                    if (tds[i-2].innerHTML > tds[i-1].innerHTML) {
-                        biggest = tds[i-2];
-                    }
-                } else if (tds[i-2].innerHTML > tds[i].innerHTML) {
-                    biggest = tds[i-2];
-                }
-                if (biggest.innerHTML != 0) {
-                    biggest.style.textDecoration = "underline";
-                }
-            }
-		}
-    }
 </script>
 </html>
