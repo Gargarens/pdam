@@ -8,6 +8,7 @@ var modes = {426: "Conquest", 435: "Arena", 448: "Joust", 445: "Assault", 10195:
     451: "Conquest Ranked", 10193: "Under 30 Conquest", 10197: "Under 30 Joust", 450: "Joust Ranked",
     10189: "Slash", 440: "Duel Ranked"};
 var checkboxes;
+var roleSelectButton;
 function load(gods, roles, tables) {
     godNames = gods;
     godRoles = roles;
@@ -17,6 +18,8 @@ function load(gods, roles, tables) {
         checkbox.checked = true;
         checkbox.addEventListener('click', selectRole);
     });
+    roleSelectButton = document.getElementById('role-select-button');
+    roleSelectButton.addEventListener('click', selectAllRoles);
     generateTable();
 }
 function selectColumn(column) {
@@ -36,7 +39,8 @@ function selectRole(event) {
     generateTable();
 }
 function selectAllRoles() {
-
+    selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
+    checkboxes.forEach(checkbox => checkbox.checked = true);
 }
 function generateTable() {
 //    console.log(selectedRoles);
