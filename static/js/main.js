@@ -31,7 +31,7 @@ function selectMode(mode) {
     generateTable();
 }
 function selectRole(event) {
-    var role = event.path[0].id;
+    var role = event.composedPath()[0].id;
     if (selectedRoles.includes(role)) {
         selectedRoles.splice(selectedRoles.indexOf(role), 1);
     } else {
