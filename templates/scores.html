@@ -10,7 +10,7 @@
 <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
 </head>
 
-<body style="color: #333333" onload="load({{gods}}, {{roles}}, {{tables}})">
+<body style="color: #333333" onload="load({{gods}}, {{roles}}, {{tables}}, {{tableheaders}})">
     <div>
         <nav>
             <div class="dropdown">
@@ -106,7 +106,23 @@
                 {% endfor %}
             </tbody>
         </table>
-    </div>
+    </div><br><br>
+    <table class="content-table">
+        <thead class="reign-header">
+            <tr class="reign-header-row">
+                <th></th>
+                <th>creviceguy</th>
+                <th>Spuik</th>
+                <th>MeatEater04</th>
+            </tr>
+        </thead>
+        <tbody>
+            <td>Reigns</td>
+            <td id="creviceguy-reigns">0</td>
+            <td id="Spuik-reigns">0</td>
+            <td id="MeatEater04-reigns">0</td>
+        </tbody>
+    </table>
 </body>
 <script>
 
