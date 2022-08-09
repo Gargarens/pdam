@@ -39,8 +39,13 @@ function selectRole(event) {
     generateTable();
 }
 function selectAllRoles() {
-    selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
-    checkboxes.forEach(checkbox => checkbox.checked = true);
+    if (selectedRoles.length == 5) {
+        selectedRoles = [];
+        checkboxes.forEach(checkbox => checkbox.checked = false);
+    } else {
+        selectedRoles = ['Assassin', 'Guardian', 'Hunter', 'Mage', 'Warrior'];
+        checkboxes.forEach(checkbox => checkbox.checked = true);
+    }
 }
 function generateTable() {
 //    console.log(selectedRoles);
