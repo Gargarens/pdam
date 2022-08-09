@@ -50,6 +50,12 @@ function selectAllRoles() {
     generateTable();
 }
 function generateTable() {
+    if (selectedRoles.length == 0) {
+        console.log("should red");
+        document.getElementById("role-select-button").style.color = '#dd0000';
+    } else {
+        document.getElementById("role-select-button").style.color = '#c9d1d9';
+    }
     document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
     document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
     tds = document.getElementsByClassName("data-column");
