@@ -2,8 +2,8 @@ from databasehandler import *
 from apihandler import *
 from flask import Flask, render_template, request, flash
 
-application = Flask(__name__)
-application.secret_key = "cockandballs"
+app = Flask(__name__)
+app.secret_key = "cockandballs"
 time_since_start = 0
 sessionid = 0
 session_start_time = datetime.datetime.utcnow()
@@ -23,13 +23,13 @@ modes = {
     "440":   "Duel Ranked"
 }
 
-@application.route("/")
+@app.route("/")
 def index():
     # flash("Player name")
     return render_template("index.html")
 
 
-@application.route("/createtables", methods=["POST", "GET"])
+@app.route("/createtables", methods=["POST", "GET"])
 def createtables():
     # ALL COMMENTED OUT TO NOT FUCK UP THE DATABASE
     # players = getplayersdb()
@@ -56,7 +56,7 @@ def createtables():
     return render_template("createtables.html")
 
 
-@application.route("/start", methods=["POST", "GET"])
+@app.route("/start", methods=["POST", "GET"])
 def start():
     global sessionid
     global time_since_start
@@ -69,7 +69,7 @@ def start():
     return render_template("start.html")
 
 
-@application.route("/arena", methods=["POST", "GET"])
+@app.route("/arena", methods=["POST", "GET"])
 def arena():
     global sessionid
     playername = "creviceguy"
@@ -81,7 +81,7 @@ def arena():
     return render_template("arena.html")
 
 
-@application.route("/check", methods=["POST", "GET"])
+@app.route("/check", methods=["POST", "GET"])
 def check():
     global time_since_start
     global sessionid
@@ -101,7 +101,7 @@ def check():
     return render_template("check.html")
 
 
-@application.route("/gods", methods=["POST", "GET"])
+@app.route("/gods", methods=["POST", "GET"])
 def gods():
     global sessionid
     god_data = getgods(sessionid)
@@ -113,7 +113,7 @@ def gods():
     return render_template("gods.html")
 
 
-@application.route("/update", methods=["POST", "GET"])
+@app.route("/update", methods=["POST", "GET"])
 def update():
     global sessionid
     players = getplayersdb()
@@ -190,7 +190,7 @@ def update():
     return render_template("update.html")
 
 
-@application.route("/scores", methods=["POST", "GET"])
+@app.route("/scores", methods=["POST", "GET"])
 def scores():
     columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
     data = {}
@@ -231,6 +231,5 @@ def scores():
     return render_template("scores.html", tableheaders=enabledplayers, gods=gods, roles=roles, tables=tables, len=len)
 
 
-# if __name__ == "__main__":
-#     application.run()
-#
+if __name__ == "__main__":
+    app.run()
