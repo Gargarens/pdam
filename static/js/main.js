@@ -59,6 +59,9 @@ function generateTable() {
     }
     document.getElementById("mode-select-button").innerHTML = modes[selectedMode];
     document.getElementById("column-select-button").innerHTML = selectedColumn.replace(/^\w/, (c) => c.toUpperCase());
+    if (document.getElementById("column-select-button").innerHTML == "Selfhealing") {
+        document.getElementById("column-select-button").innerHTML = "Self Healing";
+    }
     tds = document.getElementsByClassName("data-column");
     trs = document.getElementsByClassName("data-row");
     values = allTables[selectedMode][selectedColumn].flat();

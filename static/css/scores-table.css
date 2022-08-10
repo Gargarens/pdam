@@ -81,4 +81,7 @@ body {
     .content-table td {
         width: 207px;
     }
+    .spacer {
+        height: 150px;
+    }
 }
