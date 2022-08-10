@@ -52,7 +52,6 @@ function selectAllRoles() {
     generateTable();
 }
 function generateTable() {
-    console.clear();
     if (selectedRoles.length == 0) {
         document.getElementById("role-select-button").style.color = '#dd0000';
     } else {
@@ -63,7 +62,6 @@ function generateTable() {
     tds = document.getElementsByClassName("data-column");
     trs = document.getElementsByClassName("data-row");
     values = allTables[selectedMode][selectedColumn].flat();
-    console.log(values);
     reigns = {}
     players.forEach(player => reigns[player] = 0);
     for (let i = 0; i < tds.length; i++) {
@@ -85,14 +83,10 @@ function generateTable() {
                     biggest = i-2;
                 }
                 if (tds[biggest].innerHTML != 0) {
-                    console.log("\nBiggest value: " + tds[biggest].innerHTML);
                     for (j = 0; j < players.length; j++) {
-                        console.log(players[(players.length - 1 - j)] + " value: " + tds[i-j].innerHTML);
                         if (i - biggest == j) {
-                            console.log("I think the player with the biggest value is " + players[(players.length - 1 - j)]);
                             name = players[(players.length - 1 - j)];
                             reigns[name] = reigns[name] + 1;
-                            console.log("Reigns for " + name + ": " + reigns[name]);
                         }
                     }
                     tds[biggest].style.fontWeight = "bold";
