@@ -231,5 +231,6 @@ def scores():
     return render_template("scores.html", tableheaders=enabledplayers, gods=gods, roles=roles, tables=tables, len=len)
 
 
-if __name__ == "__main__":
-    application.run()
+# if __name__ == "__main__":
+#     application.run()
+#
