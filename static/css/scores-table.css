@@ -26,7 +26,7 @@ body {
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
     background-color: #161b22;
-    color: #8b949e;
+    color: #484f58;
     margin-bottom: 0;
 }
 .content-table thead tr {
@@ -42,6 +42,7 @@ body {
 }
 .god-header {
     text-align: left;
+    color: #0d1117;
 }
 .god-column {
     border-right: 1px;
@@ -49,6 +50,7 @@ body {
 }
 .data-header {
     text-align: right;
+    color: #0d1117;
 }
 .data-column {
     text-align: right;
@@ -71,7 +73,6 @@ body {
 .reign-td {
     padding: 3px 8px 2px 5px;
     text-align: right;
-    width: 120px;
 }
 .spacer {
     height: 100px;
@@ -81,6 +82,8 @@ body {
     .content-table {
         font-size: 1.6em;
         width: 90%;
-        color: #000000;
+    }
+    .god-column {
+        max-width: 100px;
     }
 }
