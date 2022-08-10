@@ -26,8 +26,11 @@ body {
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
     background-color: #161b22;
-    color: #484f58;
+    color: #6e7681;
     margin-bottom: 0;
+}
+#reign-table {
+
 }
 .content-table thead tr {
     font-weight: bold;
@@ -38,7 +41,7 @@ body {
 .content-table th,
 .content-table td {
     padding: 3px 8px 2px 5px;
-    width: 120px;
+    width: 140px;
 }
 .god-header {
     text-align: left;
@@ -55,7 +58,8 @@ body {
 .data-column {
     text-align: right;
 }
-.content-table tbody {
+.reign-td {
+    text-align: right;
 }
 .content-table tbody tr {
     border-bottom: 2px solid #0d1117;
@@ -66,24 +70,15 @@ body {
 .content-table tbody tr:last-of-type {
     border-bottom: 2px solid #0d1117;
 }
-#reign-div {
-}
-#reign-table {
-}
-.reign-td {
-    padding: 3px 8px 2px 5px;
-    text-align: right;
-}
 .spacer {
     height: 100px;
 }
 
 @media screen and (max-width: 1024px) {
     .content-table {
-        font-size: 1.6em;
-        width: 90%;
+        font-size: 1.8em;
     }
-    .god-column {
-        max-width: 100px;
+    .content-table td {
+        width: 207px;
     }
 }
