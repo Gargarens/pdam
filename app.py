@@ -1,6 +1,6 @@
 from databasehandler import *
 from apihandler import *
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, flash
 
 app = Flask(__name__)
 app.secret_key = "cockandballs"
@@ -25,7 +25,6 @@ modes = {
 
 @app.route("/index")
 def index():
-    # flash("Player name")
     return render_template("index.html")
 
 
@@ -67,18 +66,6 @@ def start():
     # flash("Session start time: " + str(session_start_time))
     # flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
     return render_template("start.html")
-
-
-@app.route("/arena", methods=["POST", "GET"])
-def arena():
-    global sessionid
-    playername = "creviceguy"
-    date = "20220427"
-    hour = "20"
-    #arenadata = apihandler.getmatchidsbyqueue(435, date, hour, session_id)
-    #print("Matches for " + date + ", hour " + hour + ":")
-    #print(arenadata)
-    return render_template("arena.html")
 
 
 @app.route("/check", methods=["POST", "GET"])
@@ -137,6 +124,9 @@ def update():
             except:
                 print("Error for player " + playername)
                 go = False
+            if god == "ChangE":
+                god = "Chang''e"
+            print("God: " + god)
             if not go:
                 continue
             mode = str(match["Match_Queue_Id"])

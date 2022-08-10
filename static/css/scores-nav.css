@@ -102,10 +102,13 @@ input[type=checkbox]:checked + label {
     margin: 5px;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     .dropbutton {
         padding: 6px;
         font-size: 2em;
         text-align: center;
+    }
+    nav {
+        justify-content: space-around;
     }
 }
