@@ -23,7 +23,7 @@ modes = {
     "440":   "Duel Ranked"
 }
 
-@app.route("/")
+@app.route("/index")
 def index():
     # flash("Player name")
     return render_template("index.html")
@@ -190,7 +190,7 @@ def update():
     return render_template("update.html")
 
 
-@app.route("/scores", methods=["POST", "GET"])
+@app.route("/", methods=["POST", "GET"])
 def scores():
     columns = ["damage", "mitigated", "kills", "assists", "healing", "selfhealing"]
     data = {}

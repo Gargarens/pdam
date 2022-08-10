@@ -84,12 +84,12 @@
             </div>
         </nav>
     </div>
-
+    <div class="spacer"></div>
     <div id="reign-div">
-        <table class="content-table">
+        <table class="content-table" id="reign-table">
             <thead class="reign-header">
                 <tr class="reign-header-row">
-                    <th></th>
+                    <th style="text-align: left">God</th>
                     <th style="text-align: right">creviceguy</th>
                     <th style="text-align: right">Spuik</th>
                     <th style="text-align: right">MeatEater04</th>
@@ -103,17 +103,16 @@
             </tbody>
         </table>
     </div>
-
     <div id="tabdiv">
         <table id="scores" class="content-table">
-            <thead class="header">
-                <tr class="header-row">
-                    <th class="god-header">God</th>
-                    {% for header in tableheaders %}
-                        <th class="data-header">{{header}}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
+<!--            <thead class="header">-->
+<!--                <tr class="header-row">-->
+<!--                    <th class="god-header">God</th>-->
+<!--                    {% for header in tableheaders %}-->
+<!--                        <th class="data-header">{{header}}</th>-->
+<!--                    {% endfor %}-->
+<!--                </tr>-->
+<!--            </thead>-->
             <tbody>
                 {% for i in range(len(tables['435']["damage"])) %}
                     <tr class="data-row">

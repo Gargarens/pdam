@@ -15,7 +15,6 @@ body {
 }
 #tabdiv {
     margin-top: 10px;
-    max-height: 600px;
     overflow: auto;
 }
 .content-table {
@@ -66,12 +65,16 @@ body {
     border-bottom: 2px solid #0d1117;
 }
 #reign-div {
-    margin-top: 100px;
+}
+#reign-table {
 }
 .reign-td {
     padding: 3px 8px 2px 5px;
     text-align: right;
     width: 120px;
+}
+.spacer {
+    height: 100px;
 }
 
 @media screen and (max-width: 768px) {

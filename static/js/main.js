@@ -99,7 +99,7 @@ function generateTable() {
        document.getElementById(player + "-reigns").innerHTML = reigns[player];
     });
     if (document.getElementById('tabdiv').clientHeight >= 600) {
-        document.getElementById('reign-div').style.marginRight = "18px";
+        document.getElementById('tabdiv').style.marginLeft = "0";
     } else {
         document.getElementById('reign-div').style.marginRight = "0";
     }

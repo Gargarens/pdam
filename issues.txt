@@ -1,1 +1,0 @@
-text-decorating and reign counting gets confused when switching between filters
