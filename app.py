@@ -156,13 +156,5 @@ def scores():
     return render_template("scores.html", tableheaders=enabled_players, gods=gods, roles=roles, tables=tables, len=len)
 
 
-@app.route("/schedule", methods=["POST", "GET"])
-def schedule():
-    return render_template("schedule.html")
-
-
-
-
-
 if __name__ == "__main__":
     app.run()
