@@ -91,6 +91,7 @@ def check():
 @app.route("/gods", methods=["POST", "GET"])
 def gods():
     global sessionid
+    global session_start_time
     god_data = getgods(sessionid)
     dbdata = []
     for god in god_data:
@@ -103,6 +104,8 @@ def gods():
 @app.route("/update", methods=["POST", "GET"])
 def update():
     global sessionid
+    if sessionid == 0:
+        sessionid, session_start_timestamp, session_start_time = getSessionID()
     players = getplayersdb()
     verbose = False
     for player in players:
