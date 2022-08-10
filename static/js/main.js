@@ -63,10 +63,13 @@ function generateTable() {
     tds = document.getElementsByClassName("data-column");
     trs = document.getElementsByClassName("data-row");
     values = allTables[selectedMode][selectedColumn].flat();
+    console.log(values);
     reigns = {}
     players.forEach(player => reigns[player] = 0);
     for (let i = 0; i < tds.length; i++) {
         var row = Math.floor(i/3);
+        tds[i].style.fontWeight = "normal";
+        tds[i].innerHTML = values[i];
         if (!selectedRoles.includes(godRoles[godNames[row]])) {
             trs[row].style.display = "none";
         } else {
@@ -82,10 +85,14 @@ function generateTable() {
                     biggest = i-2;
                 }
                 if (tds[biggest].innerHTML != 0) {
+                    console.log("\nBiggest value: " + tds[biggest].innerHTML);
                     for (j = 0; j < players.length; j++) {
+                        console.log(players[(players.length - 1 - j)] + " value: " + tds[i-j].innerHTML);
                         if (i - biggest == j) {
+                            console.log("I think the player with the biggest value is " + players[(players.length - 1 - j)]);
                             name = players[(players.length - 1 - j)];
                             reigns[name] = reigns[name] + 1;
+                            console.log("Reigns for " + name + ": " + reigns[name]);
                         }
                     }
                     tds[biggest].style.fontWeight = "bold";
@@ -93,8 +100,6 @@ function generateTable() {
                 }
             }
         }
-        tds[i].innerHTML = values[i];
-        tds[i].style.textDecoration = "none";
     }
     players.forEach(player => {
        document.getElementById(player + "-reigns").innerHTML = reigns[player];
