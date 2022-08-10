@@ -103,16 +103,9 @@ input[type=checkbox]:checked + label {
 }
 
 @media screen and (max-width: 768px) {
-    nav {
-        height: 3vh;
-    }
-    .mode-links {
-        background-color: #191919;
-    }
-    .mode-links li {
-        border: none;
-    }
-    .mode-links li:last-child {
-        border: none;
+    .dropbutton {
+        padding: 6px;
+        font-size: 2em;
+        text-align: center;
     }
 }

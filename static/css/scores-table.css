@@ -78,5 +78,9 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-
+    .content-table {
+        font-size: 1.6em;
+        width: 90%;
+        color: #000000;
+    }
 }
