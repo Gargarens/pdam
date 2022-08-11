@@ -1,14 +1,17 @@
 from databasehandler import *
 from apihandler import *
 from flask import Flask, render_template, flash
+from flask_apscheduler import APScheduler
+from updateDB import updateDB
 
 app = Flask(__name__)
 app.secret_key = "cockandballs"
+scheduler = APScheduler()
 time_since_start = 0
-sessionid = 0
+session_id = 0
 session_start_time = datetime.datetime.utcnow()
-modekeys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
-enabledplayers = ["creviceguy", "Spuik", "MeatEater04"]
+mode_keys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
+enabled_players = ["creviceguy", "Spuik", "MeatEater04"]
 modes = {
     "426":   "Conquest",
     "435":   "Arena",
@@ -22,6 +25,15 @@ modes = {
     "10189": "Slash",
     "440":   "Duel Ranked"
 }
+
+
+def updateTask():
+    updateDB(enabled_players, mode_keys)
+
+
+scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=600)
+scheduler.start()
+
 
 @app.route("/index")
 def index():
@@ -57,24 +69,20 @@ def createtables():
 
 @app.route("/start", methods=["POST", "GET"])
 def start():
-    global sessionid
+    global session_id
     global time_since_start
     global session_start_time
-    sessionid, session_start_timestamp, session_start_time = getSessionID()
-    # time_since_start = apihandler.datetimenow() - session_start_time
-    # flash("Session ID: " + str(session_id))
-    # flash("Session start time: " + str(session_start_time))
-    # flash("Time since start: " + helper.timeDeltaToMinSec(str(time_since_start)))
+    session_id, session_start_timestamp, session_start_time = getSessionID()
     return render_template("start.html")
 
 
 @app.route("/check", methods=["POST", "GET"])
 def check():
     global time_since_start
-    global sessionid
+    global session_id
     global session_start_time
     time_since_start = datetimenow() - session_start_time
-    datausedcheck = checkdatause(sessionid)[0]
+    datausedcheck = checkdatause(session_id)[0]
 
     requestsLeft = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
     flash("Requests left: " + str(requestsLeft))
@@ -90,9 +98,9 @@ def check():
 
 @app.route("/gods", methods=["POST", "GET"])
 def gods():
-    global sessionid
+    global session_id
     global session_start_time
-    god_data = getgods(sessionid)
+    god_data = getgods(session_id)
     dbdata = []
     for god in god_data:
         dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
@@ -103,83 +111,7 @@ def gods():
 
 @app.route("/update", methods=["POST", "GET"])
 def update():
-    global sessionid
-    if sessionid == 0:
-        sessionid, session_start_timestamp, session_start_time = getSessionID()
-    players = getplayersdb()
-    verbose = False
-    for player in players:
-        playerid = player[0]
-        playername = player[1]
-        if playername not in enabledplayers:
-            print("Skipping " + playername + " because it's not in the list of "
-                                             "enabled players.")
-            continue
-        print("Updating " + playername)
-        recent = getmatchhistory(playerid, sessionid)
-
-        for match in recent:
-            # Sometimes API returns just "None"s. Skip those matches
-            go = True
-            god = ""
-            try:
-                god = match["God"].replace("_", " ")
-            except:
-                print("Error for player " + playername)
-                go = False
-            if god == "ChangE":
-                god = "Chang''e"
-            print("God: " + god)
-            if not go:
-                continue
-            mode = str(match["Match_Queue_Id"])
-            if mode not in modekeys:
-                continue
-            damage = match["Damage"]
-            mitigated = match["Damage_Mitigated"]
-            kills = match["Kills"]
-            assists = match["Assists"]
-            healing = match["Healing"]
-            selfhealing = match["Healing_Player_Self"]
-            table = playername + "_" + mode
-            sql = "SELECT * FROM " + table + " WHERE god = '" + god + "'"
-            tabledata = fetchsql(sql)
-            if len(tabledata) > 0:
-                top = tabledata[0]
-            else:
-                print("NOTHING IN DB-------------\nGod: " + god)
-                continue
-            # (0:GOD, 1:DMG, 2:MIT, 3:KILL, 4:ASSIST, 5:HEAL, 6:SELFHEAL)
-            if damage > top[1]:
-                sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New damage PR for " + playername + "(" + god + ")")
-                runsql(sql)
-            if mitigated > top[2]:
-                sql = "UPDATE " + table + " SET mitigated = " + str(mitigated) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New mitigated PR for " + playername + "(" + god + ")")
-                runsql(sql)
-            if kills > top[3]:
-                sql = "UPDATE " + table + " SET kills = " + str(kills) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New kills PR for " + playername + "(" + god + ")")
-                runsql(sql)
-            if assists > top[4]:
-                sql = "UPDATE " + table + " SET assists = " + str(assists) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New assists PR for " + playername + "(" + god + ")")
-                runsql(sql)
-            if healing > top[5]:
-                sql = "UPDATE " + table + " SET healing = " + str(healing) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New healing PR for " + playername + "(" + god + ")")
-                runsql(sql)
-            if selfhealing > top[6]:
-                sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New selfhealing PR for " + playername + "(" + god + ")")
-                runsql(sql)
+    updateDB(enabled_players, mode_keys)
     return render_template("update.html")
 
 
@@ -199,7 +131,7 @@ def scores():
         roles[god] = role
     for mode in modes:
         data[mode] = {}
-        for player in enabledplayers:
+        for player in enabled_players:
             table = player + "_" + mode
             res = getdata(table)
             data[mode][player] = res
@@ -217,11 +149,11 @@ def scores():
         for j in range(len(gods)):
             for i in range(len(columns)):
                 entry = []
-                for player in enabledplayers:
+                for player in enabled_players:
                     entry.append(data[mode][player][j][i+1])
                 rows[columns[i]].append(entry)
         tables[mode] = rows
-    return render_template("scores.html", tableheaders=enabledplayers, gods=gods, roles=roles, tables=tables, len=len)
+    return render_template("scores.html", tableheaders=enabled_players, gods=gods, roles=roles, tables=tables, len=len)
 
 
 if __name__ == "__main__":
