@@ -13,7 +13,7 @@ def updateDB(enabled_players, mode_keys):
             print("Skipping " + player_name + " because it's not in the list of "
                   "enabled players.")
             continue
-        print("Updating " + player_name)
+        # print("Updating " + player_name)
         recent = getmatchhistory(player_id, session_id)
 
         for match in recent:
@@ -27,7 +27,7 @@ def updateDB(enabled_players, mode_keys):
                 go = False
             if god == "ChangE":
                 god = "Chang''e"
-            print("God: " + god)
+            # print("God: " + god)
             if not go:
                 continue
             mode = str(match["Match_Queue_Id"])
