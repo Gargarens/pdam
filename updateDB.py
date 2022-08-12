@@ -52,29 +52,29 @@ def updateDB(enabled_players, mode_keys):
                 sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
                 if verbose:
                     print("New damage PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                runsql([sql])
             if mitigated > top[2]:
                 sql = "UPDATE " + table + " SET mitigated = " + str(mitigated) + " WHERE god='" + god + "'"
                 if verbose:
                     print("New mitigated PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                runsql([sql])
             if kills > top[3]:
                 sql = "UPDATE " + table + " SET kills = " + str(kills) + " WHERE god='" + god + "'"
                 if verbose:
                     print("New kills PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                runsql([sql])
             if assists > top[4]:
                 sql = "UPDATE " + table + " SET assists = " + str(assists) + " WHERE god='" + god + "'"
                 if verbose:
                     print("New assists PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                runsql([sql])
             if healing > top[5]:
                 sql = "UPDATE " + table + " SET healing = " + str(healing) + " WHERE god='" + god + "'"
                 if verbose:
                     print("New healing PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                runsql([sql])
             if selfhealing > top[6]:
                 sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
                 if verbose:
                     print("New selfhealing PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                runsql([sql])

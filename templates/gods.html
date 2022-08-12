@@ -8,14 +8,11 @@
 <body>
     <img src="/static/pdclogo.png">
     <br>
-    <form action="check" method="post">
-        <input type="submit" value="CHECK" id ="check">
+    <form action="createtables" method="post">
+        <input type="submit" value="CREATE TABLES" id ="createtables">
         {% for msg in get_flashed_messages(): %}
         <p> {{ msg }} </p>
         {% endfor %}
-        <br>
-<!--        <input type="text" name="name_input">-->
-        <br>
     </form>
 </body>
 </html>

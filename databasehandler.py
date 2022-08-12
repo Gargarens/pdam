@@ -1,10 +1,16 @@
 import sqlite3
-db = "pdam.sqlite"
+# db = "pdam.sqlite"
+# db = "postgres://eqqawghmzbrspv:8d24308bbef2127c5c9d9ae3fdae507569f788ad6a60c4a619dd055ef398de1a@ec2-54-75-26-218." \
+#      "eu-west-1.compute.amazonaws.com:5432/de176gevbt1ads"
+db = "test.sqlite"
 
 
 def insertintotable(data, table):
     connection = sqlite3.connect(db)
     cursor = connection.cursor()
+    sql = "create table if not exists " + table
+    cursor.execute(sql)
+    print("Added table")
     executestring = "insert into " + table + " values (?,?,?)"
     print(executestring)
     print("************************")
@@ -15,23 +21,9 @@ def insertintotable(data, table):
 
 def truncatetable(table):
     sql = "truncate table " + table
-    runsql(sql)
+    runsql([sql])
 
 
-# def createtable(table, params):
-#     connection = sqlite3.connect(db)
-#     cursor = connection.cursor()
-#     executestring = "create table if not exists " + table
-#     if len(params) > 0:
-#         executestring = executestring + " ("
-#         for param in params:
-#             executestring = executestring + param + ", "
-#         executestring = executestring[:-2] + ")"
-#     cursor.execute(executestring)
-#     connection.commit()
-#     connection.close()
-
-# refactored version, can delete one above after this is tested
 def createtable(table, params):
     sql = "create table if not exists " + table
     if len(params) > 0:
@@ -39,10 +31,11 @@ def createtable(table, params):
         for param in params:
             sql = sql + param + ", "
         sql = sql[:-2] + ")"
-    runsql(sql)
+    runsql([sql])
 
 
 def getplayersdb():
+
     sql = "select * from players"
     return fetchsql(sql)
 
@@ -58,10 +51,11 @@ def getplayerid(playername):
     return playerid
 
 
-def runsql(sql):
+def runsql(sqlarray):
     connection = sqlite3.connect(db)
     cursor = connection.cursor()
-    cursor.execute(sql)
+    for sql in sqlarray:
+        cursor.execute(sql)
     connection.commit()
     connection.close()
 
