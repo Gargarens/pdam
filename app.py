@@ -3,15 +3,21 @@ from apihandler import *
 from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
 from updateDB import updateDB
+from flask_sqlalchemy import SQLAlchemy
+import datab
 
 app = Flask(__name__)
 app.secret_key = "cockandballs"
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testicle.sqlite'
 scheduler = APScheduler()
+db = SQLAlchemy(app)
 time_since_start = 0
 session_id = 0
 session_start_time = datetime.datetime.utcnow()
 mode_keys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
 enabled_players = ["creviceguy", "Spuik", "MeatEater04"]
+enabled_players_id = ["1932674", "1922769", "716965538"]
 modes = {
     "426":   "Conquest",
     "435":   "Arena",
@@ -43,31 +49,31 @@ def index():
 @app.route("/createtables", methods=["POST", "GET"])
 def createtables():
     # ALL COMMENTED OUT TO NOT FUCK UP THE DATABASE
-    players = getplayersdb()
-
-    # Just hardcode insert players into db
-    if len(players) == 0:
-        sqlexecutemany("INSERT INTO players values (?, ?)",
-                       [(1922769, "Spuik"), (1932674, "creviceguy"), (716965538, "MeatEater04")])
-
-    columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
-               "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
-               "selfhealing INTEGER DEFAULT (0)"]
-    godsfromdb = getgodsdb()
-    gods = []
-    rows = []
-    for tuple in godsfromdb:
-        gods.append(tuple[0])
-    for god in gods:
-        values = (god, 0, 0, 0, 0, 0, 0)
-        rows.append(values)
-    for player in players:
-        name = player[1]
-        for table in modes:
-            tablename = name + "_" + table
-            createtable(tablename, columns)
-            sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
-            sqlexecutemany(sql, rows)
+    # players = getplayersdb()
+    #
+    # # Just hardcode insert players into db
+    # if len(players) == 0:
+    #     sqlexecutemany("INSERT INTO players values (?, ?)",
+    #                    [(1922769, "Spuik"), (1932674, "creviceguy"), (716965538, "MeatEater04")])
+    #
+    # columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
+    #            "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
+    #            "selfhealing INTEGER DEFAULT (0)"]
+    # godsfromdb = getgodsdb()
+    # gods = []
+    # rows = []
+    # for tuple in godsfromdb:
+    #     gods.append(tuple[0])
+    # for god in gods:
+    #     values = (god, 0, 0, 0, 0, 0, 0)
+    #     rows.append(values)
+    # for player in players:
+    #     name = player[1]
+    #     for table in modes:
+    #         tablename = name + "_" + table
+    #         createtable(tablename, columns)
+    #         sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
+    #         sqlexecutemany(sql, rows)
 
     return render_template("createtables.html")
 
@@ -101,27 +107,73 @@ def check():
     return render_template("check.html")
 
 
+class Gods(db.Model):
+    name = db.Column(db.String, primary_key=True)
+    role = db.Column(db.String, nullable=False)
+    pantheon = db.Column(db.String, nullable=False)
+
+    def __repr__(self):
+        return '<God %r>' % self.name
+
+    def __init__(self, name, role, pantheon):
+        self.name = name
+        self.role = role
+        self.pantheon = pantheon
+
+
+class Players(db.Model):
+    player_id = db.Column(db.String, primary_key=True)
+    name = db.Column(db.String)
+
+    def __repr__(self):
+        return '<Player %r>' % self.name
+
+    def __init__(self, pid, name):
+        self.player_id = pid
+        self.name = name
+
+
 @app.route("/gods", methods=["POST", "GET"])
 def gods():
     global session_id
     global session_start_time
-    god_data = getgods(session_id)
-    existinggods = getgodnamesdb()
-    existinggodnames = []
-    for tuple in existinggods:
-        existinggodnames.append(tuple[0])
-    dbdata = []
-    for god in god_data:
-        if god["Name"] not in existinggodnames:
-            dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
-    insertintotable(dbdata, "gods", " (name TEXT, role TEXT, pantheon TEXT)")
+    db.create_all()
+    god_data = datab.data  # god_data = getgods(session_id)
 
+    for entry in god_data:
+        found_god = Gods.query.filter_by(name=entry["Name"]).first()
+        if found_god:
+            print(found_god, end=" ")
+            print("already in database")
+        else:
+            god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
+            db.session.add(god)
+
+    for pid, name in zip(enabled_players_id, enabled_players):
+        found_player = Players.query.filter_by(player_id=pid).first()
+        if found_player:
+            print(found_player, end=" ")
+            print("already in database")
+        else:
+            player = Players(pid, name)
+            db.session.add(player)
+    db.session.commit()
     return render_template("gods.html")
 
 
 @app.route("/update", methods=["POST", "GET"])
 def update():
-    updateDB(enabled_players, mode_keys)
+    players = Players.query.all()
+    print(players[0].player_id)
+    for player in players:
+        player_id = player.player_id
+        player_name = player.name
+        if player_name not in enabled_players:
+            print("Skipping " + player_name + " because it's not in the list of "
+                                              "enabled players.")
+            continue
+        print("Updating " + player_name)
+        recent = getmatchhistory(player_id, session_id)
     return render_template("update.html")
 
 
@@ -167,4 +219,4 @@ def scores():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(port=1234, debug=True, use_reloader=False)
