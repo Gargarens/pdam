@@ -1,3 +1,5 @@
+import sqlalchemy
+
 from databasehandler import *
 from apihandler import *
 from flask import Flask, render_template, flash
@@ -157,6 +159,7 @@ def gods():
         else:
             player = Players(pid, name)
             db.session.add(player)
+
     db.session.commit()
     return render_template("gods.html")
 
@@ -173,7 +176,7 @@ def update():
                                               "enabled players.")
             continue
         print("Updating " + player_name)
-        recent = getmatchhistory(player_id, session_id)
+        # recent = getmatchhistory(player_id, session_id)
     return render_template("update.html")
 
 
@@ -220,3 +223,333 @@ def scores():
 
 if __name__ == "__main__":
     app.run(port=1234, debug=True, use_reloader=False)
+
+
+class creviceguy_426(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_435(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_448(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_445(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_10195(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_451(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_10193(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_10197(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_450(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_10189(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class creviceguy_440(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_426(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_435(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_448(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_445(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_10195(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_451(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_10193(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_10197(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_450(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_10189(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Spuik_440(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_426(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_435(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_448(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_445(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_10195(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_451(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_10193(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_10197(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_450(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_10189(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
+
+
+class Meateater04_440(db.Model):
+    god = db.Column(db.String, primary_key=True)
+    damage = db.Column(db.Integer, default=0)
+    mitigated = db.Column(db.Integer, default=0)
+    kills = db.Column(db.Integer, default=0)
+    assists = db.Column(db.Integer, default=0)
+    healing = db.Column(db.Integer, default=0)
+    selfhealing = db.Column(db.Integer, default=0)
