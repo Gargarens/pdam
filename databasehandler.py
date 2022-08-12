@@ -5,16 +5,13 @@ import sqlite3
 db = "test.sqlite"
 
 
-def insertintotable(data, table):
+def insertintotable(data, table, columns):
     connection = sqlite3.connect(db)
     cursor = connection.cursor()
-    sql = "create table if not exists " + table
+    sql = "create table if not exists " + table + columns
     cursor.execute(sql)
-    print("Added table")
-    executestring = "insert into " + table + " values (?,?,?)"
-    print(executestring)
-    print("************************")
-    cursor.executemany(executestring, data)
+    sql = "insert into " + table + " values (?,?,?)"
+    cursor.executemany(sql, data)
     connection.commit()
     connection.close()
 
@@ -35,7 +32,7 @@ def createtable(table, params):
 
 
 def getplayersdb():
-
+    createtable("players", ["player_id TEXT PRIMARY KEY", "name TEXT"])
     sql = "select * from players"
     return fetchsql(sql)
 
@@ -63,8 +60,8 @@ def runsql(sqlarray):
 def sqlexecutemany(sql, values):
     connection = sqlite3.connect(db)
     cursor = connection.cursor()
-    #print("SQL:\n" + sql + "\nVALUES:")
-    #print(values)
+    print("SQL:\n" + sql + "\nVALUES:")
+    print(values)
     cursor.executemany(sql, values)
     connection.commit()
     connection.close()
@@ -81,6 +78,13 @@ def fetchsql(sql):
 
 def getgodsdb():
     sql = "select name, role from gods"
+    return fetchsql(sql)
+
+
+def getgodnamesdb():
+    sql = "create table if not exists gods (name TEXT, role TEXT, pantheon TEXT)"
+    runsql([sql])
+    sql = "select name from gods"
     return fetchsql(sql)
 
 

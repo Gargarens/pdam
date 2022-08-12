@@ -44,6 +44,12 @@ def index():
 def createtables():
     # ALL COMMENTED OUT TO NOT FUCK UP THE DATABASE
     players = getplayersdb()
+
+    # Just hardcode insert players into db
+    if len(players) == 0:
+        sqlexecutemany("INSERT INTO players values (?, ?)",
+                       [(1922769, "Spuik"), (1932674, "creviceguy"), (716965538, "MeatEater04")])
+
     columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
                "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
                "selfhealing INTEGER DEFAULT (0)"]
@@ -62,7 +68,6 @@ def createtables():
             createtable(tablename, columns)
             sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
             sqlexecutemany(sql, rows)
-    flash("Add new gods manually")
 
     return render_template("createtables.html")
 
@@ -101,10 +106,15 @@ def gods():
     global session_id
     global session_start_time
     god_data = getgods(session_id)
+    existinggods = getgodnamesdb()
+    existinggodnames = []
+    for tuple in existinggods:
+        existinggodnames.append(tuple[0])
     dbdata = []
     for god in god_data:
-        dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
-    insertintotable(dbdata, "gods (name, role, pantheon)")
+        if god["Name"] not in existinggodnames:
+            dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
+    insertintotable(dbdata, "gods", " (name TEXT, role TEXT, pantheon TEXT)")
 
     return render_template("gods.html")
 
