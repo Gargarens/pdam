@@ -1,5 +1,3 @@
-import sqlalchemy
-
 from databasehandler import *
 from apihandler import *
 from flask import Flask, render_template, flash
@@ -17,7 +15,7 @@ db = SQLAlchemy(app)
 time_since_start = 0
 session_id = 0
 session_start_time = datetime.datetime.utcnow()
-mode_keys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
+# mode_keys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
 enabled_players = ["creviceguy", "Spuik", "MeatEater04"]
 enabled_players_id = ["1932674", "1922769", "716965538"]
 modes = {
@@ -36,7 +34,7 @@ modes = {
 
 
 def updateTask():
-    updateDB(enabled_players, mode_keys)
+    updateDB(enabled_players, modes.keys())
 
 
 scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=600)
@@ -97,14 +95,14 @@ def check():
     time_since_start = datetimenow() - session_start_time
     datausedcheck = checkdatause(session_id)[0]
 
-    requestsLeft = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
-    flash("Requests left: " + str(requestsLeft))
+    requests_left = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
+    flash("Requests left: " + str(requests_left))
 
-    activeSessions = datausedcheck['Active_Sessions']
-    flash("Active sessions: " + str(activeSessions))
+    active_sessions = datausedcheck['Active_Sessions']
+    flash("Active sessions: " + str(active_sessions))
 
-    sessionsLeft = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
-    flash("Sessions left: " + str(sessionsLeft))
+    sessions_left = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
+    flash("Sessions left: " + str(sessions_left))
 
     return render_template("check.html")
 
@@ -166,6 +164,8 @@ def gods():
 
 @app.route("/update", methods=["POST", "GET"])
 def update():
+    session_id, session_start_timestamp, session_start_time = getSessionID()
+    # updateDB(enabled_players, mode_keys)
     players = Players.query.all()
     print(players[0].player_id)
     for player in players:
@@ -176,7 +176,72 @@ def update():
                                               "enabled players.")
             continue
         print("Updating " + player_name)
-        # recent = getmatchhistory(player_id, session_id)
+        recent = getmatchhistory(player_id, session_id)
+
+    for match in recent:
+        # Sometimes API returns just "None"s. Skip those matches
+        go = True
+        god = ""
+        try:
+            god = match["God"].replace("_", " ")
+        except:
+            print("Error for player " + player_name)
+            go = False
+        if god == "ChangE":
+            god = "Chang''e"
+        # print("God: " + god)
+        if not go:
+            continue
+        mode = str(match["Match_Queue_Id"])
+        if mode not in modes.keys():
+            continue
+        damage = match["Damage"]
+        mitigated = match["Damage_Mitigated"]
+        kills = match["Kills"]
+        assists = match["Assists"]
+        healing = match["Healing"]
+        selfhealing = match["Healing_Player_Self"]
+        table = player_name + "_" + mode
+        sql = "SELECT * FROM " + table + " WHERE god = '" + god + "'"
+        tabledata = fetchsql(sql)
+        print(tabledata)
+        # if len(tabledata) > 0:
+        #     top = tabledata[0]
+        #     print(top)
+        # else:
+        #     print("NOTHING IN DB-------------\nGod: " + god)
+        #     continue
+        # # (0:GOD, 1:DMG, 2:MIT, 3:KILL, 4:ASSIST, 5:HEAL, 6:SELF HEAL)
+        # if damage > top[1]:
+        #     sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
+        #     if verbose:
+        #         print("New damage PR for " + player_name + "(" + god + ")")
+        #     runsql([sql])
+        # if mitigated > top[2]:
+        #     sql = "UPDATE " + table + " SET mitigated = " + str(mitigated) + " WHERE god='" + god + "'"
+        #     if verbose:
+        #         print("New mitigated PR for " + player_name + "(" + god + ")")
+        #     runsql([sql])
+        # if kills > top[3]:
+        #     sql = "UPDATE " + table + " SET kills = " + str(kills) + " WHERE god='" + god + "'"
+        #     if verbose:
+        #         print("New kills PR for " + player_name + "(" + god + ")")
+        #     runsql([sql])
+        # if assists > top[4]:
+        #     sql = "UPDATE " + table + " SET assists = " + str(assists) + " WHERE god='" + god + "'"
+        #     if verbose:
+        #         print("New assists PR for " + player_name + "(" + god + ")")
+        #     runsql([sql])
+        # if healing > top[5]:
+        #     sql = "UPDATE " + table + " SET healing = " + str(healing) + " WHERE god='" + god + "'"
+        #     if verbose:
+        #         print("New healing PR for " + player_name + "(" + god + ")")
+        #     runsql([sql])
+        # if selfhealing > top[6]:
+        #     sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
+        #     if verbose:
+        #         print("New selfhealing PR for " + player_name + "(" + god + ")")
+        #     runsql([sql])
     return render_template("update.html")
 
 

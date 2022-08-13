@@ -44,6 +44,7 @@ def updateDB(enabled_players, mode_keys):
             tabledata = fetchsql(sql)
             if len(tabledata) > 0:
                 top = tabledata[0]
+                print(top)
             else:
                 print("NOTHING IN DB-------------\nGod: " + god)
                 continue
