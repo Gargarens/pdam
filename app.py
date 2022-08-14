@@ -1,7 +1,7 @@
 from apihandler import *
 from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
-from db_models import Gods, Players
+from db_models import Gods, Players, modes, enabled_players, enabled_players_id
 from updateDB import updateDB
 import database_handler
 import god_data_copy
@@ -27,23 +27,6 @@ scheduler = APScheduler()
 time_since_start = 0
 session_id = 0
 session_start_time = datetime.datetime.utcnow()
-enabled_players = ["creviceguy", "Spuik", "MeatEater04"]
-enabled_players_id = ["1932674", "1922769", "716965538"]
-modes = {
-    "426":   "Conquest",
-    "435":   "Arena",
-    "448":   "Joust",
-    "445":   "Assault",
-    "10195": "Under 30 Arena",
-    "451":   "Conquest Ranked",
-    "10193": "Under 30 Conquest",
-    "10197": "Under 30 Joust",
-    "450":   "Joust Ranked",
-    "10189": "Slash",
-    "440":   "Duel Ranked"
-}
-
-
 
 
 def updateTask():
@@ -250,7 +233,8 @@ if __name__ == "__main__":
 
 @app.route("/gods", methods=["POST", "GET"])
 def gods():
-    god_data = god_data_copy.data  # god_data = getgods(session_id)
+    god_data = god_data_copy.data
+    # god_data = getgods(session_id) # commented out to not blast API every time testing
 
     for entry in god_data:
         found_god = database_handler.get_gods_db().filter_by(name=entry["Name"]).first()
@@ -269,5 +253,11 @@ def gods():
         else:
             player = Players(pid, name)
             database_handler.insert(player)
+    for table in database_handler.get_tables():
+        if table.name == "Gods" or table.name == "Players":
+            print("found Gods or Players")
+        else:
+            print("found something else: ", end=" ")
+            print(table.name)
 
     return render_template("gods.html")

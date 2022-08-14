@@ -27,3 +27,7 @@ def get_data(table):
 def insert(entry):
     local_session.add(entry)
     local_session.commit()
+
+
+def get_tables():
+    return db_models.Base.metadata.sorted_tables
