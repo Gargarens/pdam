@@ -1,6 +1,7 @@
 from apihandler import *
 from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
+from db_models import Gods, Players
 from updateDB import updateDB
 import database_handler
 import god_data_copy
@@ -249,26 +250,24 @@ if __name__ == "__main__":
 
 @app.route("/gods", methods=["POST", "GET"])
 def gods():
-    print(database_handler.get_gods_db())
-    # god_data = datab.data  # god_data = getgods(session_id)
-    #
-    # for entry in god_data:
-    #     found_god = Gods.query.filter_by(name=entry["Name"]).first()
-    #     if found_god:
-    #         print(found_god, end=" ")
-    #         print("already in database")
-    #     else:
-    #         god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
-    #         db.session.add(god)
-    #
-    # for pid, name in zip(enabled_players_id, enabled_players):
-    #     found_player = Players.query.filter_by(player_id=pid).first()
-    #     if found_player:
-    #         print(found_player, end=" ")
-    #         print("already in database")
-    #     else:
-    #         player = Players(pid, name)
-    #         db.session.add(player)
-    #
-    # db.session.commit()
+    god_data = god_data_copy.data  # god_data = getgods(session_id)
+
+    for entry in god_data:
+        found_god = database_handler.get_gods_db().filter_by(name=entry["Name"]).first()
+        if found_god:
+            print(found_god, end=" ")
+            print("already in database")
+        else:
+            god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
+            database_handler.insert(god)
+
+    for pid, name in zip(enabled_players_id, enabled_players):
+        found_player = database_handler.get_players_db().filter_by(player_id=pid).first()
+        if found_player:
+            print(found_player, end=" ")
+            print("already in database")
+        else:
+            player = Players(pid, name)
+            database_handler.insert(player)
+
     return render_template("gods.html")

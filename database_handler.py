@@ -11,10 +11,19 @@ db = SQLAlchemy()
 
 
 def get_gods_db():
-    god_data = local_session.query(db_models.Gods).all()
+    god_data = local_session.query(db_models.Gods)
     return god_data
+
+
+def get_players_db():
+    return local_session.query(db_models.Players)
 
 
 def get_data(table):
     # return all columns
     return "Agni", 0, 0, 0, 0, 0, 0
+
+
+def insert(entry):
+    local_session.add(entry)
+    local_session.commit()
