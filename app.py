@@ -3,7 +3,6 @@ from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
 from db_models import Gods, Players, modes, enabled_players, enabled_players_id
 from config import Config
-import god_data_copy
 from updateDB import updateDB
 import database_handler
 
@@ -44,8 +43,7 @@ def index():
 
 @app.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    god_data = god_data_copy.data
-    # god_data = getgods(session_id) # commented out to not blast API every time testing
+    god_data = getgods(session_id) # commented out to not blast API every time testing
 
     for entry in god_data:
         found_god = database_handler.found_god(entry["Name"])
