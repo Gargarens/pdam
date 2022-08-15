@@ -156,6 +156,6 @@ def scores():
     return render_template("scores.html", tableheaders=enabled_players, gods=gods, roles=roles, tables=tables, len=len)
 
 
-if __name__ == "__main__":
-    app.run(port=1234, debug=True, use_reloader=False)
+# if __name__ == "__main__":
+#     app.run(port=1234, debug=True, use_reloader=False)
 
