@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import db_models
 
-engine = create_engine('sqlite:///testicle.sqlite', echo=True)
+engine = create_engine('sqlite:///testicle.sqlite', echo=False)
 db_models.Base.metadata.create_all(engine)
 Session = sessionmaker()
 local_session = Session(bind=engine)
@@ -21,11 +21,16 @@ def get_players_db():
 
 def get_data(table):
     # return all columns
-    return "Agni", 0, 0, 0, 0, 0, 0
+    return local_session.query(table)
 
 
 def insert(entry):
     local_session.add(entry)
+    local_session.commit()
+
+
+def insert_into(table, values):
+    engine.execute(table.insert().values(values))
     local_session.commit()
 
 

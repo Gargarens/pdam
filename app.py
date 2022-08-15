@@ -196,7 +196,7 @@ def scores():
     for godtuple in database_handler.get_gods_db():
         god = godtuple[0]
         role = godtuple[1]
-        if role == "Mage, Ranged": # Fix bug in API with Persephone role
+        if role == "Mage, Ranged":  # Fix bug in API with Persephone role
             role = "Mage"
         gods.append(god)
         roles[god] = role
@@ -221,7 +221,7 @@ def scores():
             for i in range(len(columns)):
                 entry = []
                 for player in enabled_players:
-                    entry.append(data[mode][player][j][i+1])
+                    entry.append(data[mode][player][j][i + 1])
                 rows[columns[i]].append(entry)
         tables[mode] = rows
     return render_template("scores.html", tableheaders=enabled_players, gods=gods, roles=roles, tables=tables, len=len)
@@ -255,9 +255,21 @@ def gods():
             database_handler.insert(player)
     for table in database_handler.get_tables():
         if table.name == "Gods" or table.name == "Players":
-            print("found Gods or Players")
+            continue
         else:
-            print("found something else: ", end=" ")
-            print(table.name)
+            for god in database_handler.get_gods_db():
+                found_god = database_handler.get_data(table).filter_by(god=god.name).first()
+                if found_god:
+                    print("Already in database " + table.name + " - " + god.name)
+                else:
+                    values = [{"god": god.name},
+                              {"damage": 0},
+                              {"mitigated": 0},
+                              {"kills": 0},
+                              {"assists": 0},
+                              {"healing": 0},
+                              {"selfhealing": 0}]
+
+                    database_handler.insert_into(table, values)
 
     return render_template("gods.html")
