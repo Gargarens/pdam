@@ -133,7 +133,6 @@ def scores():
             tablename = player + "_" + mode
             res = database_handler.get_data(database_handler.get_table(tablename))
             data[mode][player] = res
-
     for mode in modes:
         damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
         rows = {

@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import db_models
 
-engine = create_engine('sqlite:///testicle.sqlite', echo=False)
+engine = create_engine('sqlite:///pdam.sqlite', echo=False)
 metadata = db_models.Base.metadata
 metadata.create_all(engine)
 Session = sessionmaker()
@@ -12,7 +12,7 @@ db = SQLAlchemy()
 
 
 def get_gods_db():
-    god_data = Session(bind=engine).query(db_models.Gods)
+    god_data = Session(bind=engine).query(db_models.Gods).order_by(db_models.Gods.name)
     return god_data
 
 
@@ -22,7 +22,7 @@ def get_players_db():
 
 def get_data(table):
     # return all columns
-    return local_session.query(table)
+    return Session(bind=engine).query(table)
 
 
 def insert(entry):
