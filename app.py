@@ -112,7 +112,6 @@ def check():
 @app.route("/update", methods=["POST", "GET"])
 def update():
     updateDB(enabled_players, modes)
-
     return render_template("update.html")
 
 
@@ -123,9 +122,9 @@ def scores():
     tables = {}
     gods = []
     roles = {}
-    for godtuple in database_handler.get_gods_db():
-        god = godtuple[0]
-        role = godtuple[1]
+    for god_entry in database_handler.get_gods_db():
+        god = god_entry.name
+        role = god_entry.role
         if role == "Mage, Ranged":  # Fix bug in API with Persephone role
             role = "Mage"
         gods.append(god)
@@ -133,8 +132,8 @@ def scores():
     for mode in modes:
         data[mode] = {}
         for player in enabled_players:
-            table = player + "_" + mode
-            res = database_handler.get_data(table)
+            tablename = player + "_" + mode
+            res = database_handler.get_data(database_handler.get_table(tablename))
             data[mode][player] = res
 
     for mode in modes:
