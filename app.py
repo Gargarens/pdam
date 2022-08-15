@@ -28,8 +28,7 @@ session_start_time = datetime.datetime.utcnow()
 
 
 def updateTask():
-    # updateDB(enabled_players, modes.keys())
-    print("updated")
+    updateDB(enabled_players, modes)
 
 
 scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=600)
