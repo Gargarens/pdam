@@ -2,6 +2,7 @@ from apihandler import *
 from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
 from db_models import Gods, Players, modes, enabled_players, enabled_players_id
+from config import Config
 from updateDB import updateDB
 import database_handler
 import god_data_copy
@@ -14,15 +15,13 @@ def register_extensions(application):
 
 def create_app():
     application = Flask(__name__)
-    # application.config.from_object(config_object)
-    application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    application.config.from_object(Config)
     register_extensions(application)
     return application
 
 
 app = create_app()
 app.secret_key = "cockandballs"
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///testicle.sqlite'
 scheduler = APScheduler()
 time_since_start = 0
 session_id = 0
@@ -234,8 +233,8 @@ if __name__ == "__main__":
 
 @app.route("/gods", methods=["POST", "GET"])
 def gods():
-    # god_data = god_data_copy.data
-    god_data = getgods(session_id) # commented out to not blast API every time testing
+    god_data = god_data_copy.data
+    # god_data = getgods(session_id) # commented out to not blast API every time testing
 
     for entry in god_data:
         found_god = database_handler.get_gods_db().filter_by(name=entry["Name"]).first()
@@ -272,7 +271,8 @@ def gods():
                 else:
                     values.append({"god": god.name})
                     # print("Initiating " + god.name + " into " + table.name)
-        database_handler.insert_into(table, values)
+            if len(values) > 0:
+                database_handler.insert_into(table, values)
 
 
     return render_template("gods.html")
