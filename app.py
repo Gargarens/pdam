@@ -44,32 +44,47 @@ def index():
 
 @app.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    # ALL COMMENTED OUT TO NOT FUCK UP THE DATABASE
-    # players = getplayersdb()
-    #
-    # # Just hardcode insert players into db
-    # if len(players) == 0:
-    #     sqlexecutemany("INSERT INTO players values (?, ?)",
-    #                    [(1922769, "Spuik"), (1932674, "creviceguy"), (716965538, "MeatEater04")])
-    #
-    # columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
-    #            "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
-    #            "selfhealing INTEGER DEFAULT (0)"]
-    # godsfromdb = getgodsdb()
-    # gods = []
-    # rows = []
-    # for tuple in godsfromdb:
-    #     gods.append(tuple[0])
-    # for god in gods:
-    #     values = (god, 0, 0, 0, 0, 0, 0)
-    #     rows.append(values)
-    # for player in players:
-    #     name = player[1]
-    #     for table in modes:
-    #         tablename = name + "_" + table
-    #         createtable(tablename, columns)
-    #         sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
-    #         sqlexecutemany(sql, rows)
+    god_data = god_data_copy.data
+    # god_data = getgods(session_id) # commented out to not blast API every time testing
+
+    for entry in god_data:
+        found_god = database_handler.get_gods_db().filter_by(name=entry["Name"]).first()
+        if found_god:
+            # print(found_god, end=" ")
+            # print("already in database")
+            continue
+        else:
+            god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
+            # print("Inserting god: " + entry["Name"])
+            database_handler.insert(god)
+
+    for pid, name in zip(enabled_players_id, enabled_players):
+        found_player = database_handler.get_players_db().filter_by(player_id=pid).first()
+        if found_player:
+            # print(found_player, end=" ")
+            # print("already in database")
+            continue
+        else:
+            player = Players(pid, name)
+            database_handler.insert(player)
+            # print("Inserting player: " + player.name)
+    for table in database_handler.get_tables():
+        if table.name == "Gods" or table.name == "Players":
+            continue
+        else:
+            # Build a list of rows and insert all at once, instead of inserting one by one. For SQL performance
+            values = []
+            for god in database_handler.get_gods_db():
+                found_god = database_handler.get_data(table).filter_by(god=god.name).first()
+                if found_god:
+                    # print("Already in database " + table.name + " - " + god.name)
+                    continue
+                else:
+                    values.append({"god": god.name})
+                    # print("Initiating " + god.name + " into " + table.name)
+            if len(values) > 0:
+                database_handler.insert_into(table, values)
+
 
     return render_template("createtables.html")
 
@@ -230,49 +245,3 @@ def scores():
 if __name__ == "__main__":
     app.run(port=1234, debug=True, use_reloader=False)
 
-
-@app.route("/gods", methods=["POST", "GET"])
-def gods():
-    god_data = god_data_copy.data
-    # god_data = getgods(session_id) # commented out to not blast API every time testing
-
-    for entry in god_data:
-        found_god = database_handler.get_gods_db().filter_by(name=entry["Name"]).first()
-        if found_god:
-            # print(found_god, end=" ")
-            # print("already in database")
-            continue
-        else:
-            god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
-            # print("Inserting god: " + entry["Name"])
-            database_handler.insert(god)
-
-    for pid, name in zip(enabled_players_id, enabled_players):
-        found_player = database_handler.get_players_db().filter_by(player_id=pid).first()
-        if found_player:
-            # print(found_player, end=" ")
-            # print("already in database")
-            continue
-        else:
-            player = Players(pid, name)
-            database_handler.insert(player)
-            # print("Inserting player: " + player.name)
-    for table in database_handler.get_tables():
-        if table.name == "Gods" or table.name == "Players":
-            continue
-        else:
-            # Build a list of rows and insert all at once, instead of inserting one by one. For SQL performance
-            values = []
-            for god in database_handler.get_gods_db():
-                found_god = database_handler.get_data(table).filter_by(god=god.name).first()
-                if found_god:
-                    # print("Already in database " + table.name + " - " + god.name)
-                    continue
-                else:
-                    values.append({"god": god.name})
-                    # print("Initiating " + god.name + " into " + table.name)
-            if len(values) > 0:
-                database_handler.insert_into(table, values)
-
-
-    return render_template("gods.html")
