@@ -53,3 +53,7 @@ def found_player(pid):
 
 def found_god_in_table(table, name):
     return get_data(table).filter_by(god=name).first()
+
+
+def execute(statement):
+    engine.execute(statement)
