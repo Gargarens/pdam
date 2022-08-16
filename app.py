@@ -28,7 +28,8 @@ session_start_time = datetime.datetime.utcnow()
 
 
 def updateTask():
-    updateDB(enabled_players, modes)
+    # updateDB(enabled_players, modes)
+    print("updated")
 
 
 scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=600)
@@ -42,38 +43,67 @@ def index():
 
 @app.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    god_data = getgods(session_id) # commented out to not blast API every time testing
-
-    for entry in god_data:
-        found_god = database_handler.found_god(entry["Name"])
-        if found_god:
+    god_data_API = getgods(session_id)
+    gods_in_db = []
+    for tuple in database_handler.get_god_names_db():
+        gods_in_db.append(tuple[0])
+    print("retrieved gods from API")
+    gods_to_add = []
+    for entry in god_data_API:
+        if entry["Name"] in gods_in_db:
+            print(entry["Name"] + " already in database, skipping")
             continue
         else:
-            god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
-            database_handler.insert(god)
+            # god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
+            god = {"name": entry["Name"], "role": entry["Roles"], "pantheon": entry["Pantheon"]}
+            gods_to_add.append(god)
+    if len(gods_to_add) > 0:
+        god_table = database_handler.get_table("Gods")
+        database_handler.insert_into(god_table, gods_to_add)
+    print("inserted " + str(len(gods_to_add)) + " gods into table Gods")
 
+    players_in_db = []
+    for tuple in database_handler.get_player_names_db():
+        players_in_db.append(tuple[0])
+    players_to_add = []
     for pid, name in zip(enabled_players_id, enabled_players):
-        found_player = database_handler.found_player(pid)
-        if found_player:
+        if name in players_in_db:
+            print(name + " already in database, skipping")
             continue
         else:
-            player = Players(pid, name)
-            database_handler.insert(player)
+            # player = Players(pid, name)
+            player = {"player_id": pid, "name": name}
+            players_to_add.append(player)
+    if len(players_to_add) > 0:  # Trying to add nothing fails NOT NULL constraint
+        player_table = database_handler.get_table("Players")
+        database_handler.insert_into(player_table, players_to_add)
+    print("inserted " + str(len(players_to_add)) + " players into Players")
 
+    gods_in_db = []
+    for tuple in database_handler.get_god_names_db():
+        gods_in_db.append(tuple[0])
     for table in database_handler.get_tables():
         if table.name == "Gods" or table.name == "Players":
+            print("Found " + table.name)
             continue
         else:
             # Build a list of rows and insert all at once, instead of inserting one by one. For SQL performance
             values = []
-            for god in database_handler.get_gods_db():
-                found_god = database_handler.found_god_in_table(table, god.name)
-                if found_god:
+            gods_in_table = []
+            for tuple in database_handler.gods_in_table(table):
+                gods_in_table.append(tuple[0])
+            print("********************")
+            print(gods_in_table)
+            print("--------------------")
+            for god in gods_in_db:
+                if god in gods_in_table:
                     continue
                 else:
-                    values.append({"god": god.name})
+                    print("Adding " + god + " to " + table.name)
+                    values.append({"god": god})
             if len(values) > 0:
                 database_handler.insert_into(table, values)
+        print(table.name + " processed.")
     return render_template("createtables.html")
 
 
