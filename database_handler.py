@@ -3,7 +3,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import db_models
 
-engine = create_engine('sqlite:///pdam.sqlite', echo=False)
+# engine = create_engine('sqlite:///pdam.sqlite', echo=False)
+engine = create_engine('postgres://eqqawghmzbrspv:8d24308bbef2127c5c9d9ae3fdae507569f788ad6a60c4a619dd055ef398de1a@ec2-54-75-26-218.eu-west-1.compute.amazonaws.com:5432/de176gevbt1ads', echo=False)
 metadata = db_models.Base.metadata
 metadata.create_all(engine)
 Session = sessionmaker()
