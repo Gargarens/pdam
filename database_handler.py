@@ -3,8 +3,8 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 import db_models
 
-# engine = create_engine('sqlite:///testicle.sqlite', echo=False)
-engine = create_engine('postgresql://eqqawghmzbrspv:8d24308bbef2127c5c9d9ae3fdae507569f788ad6a60c4a619dd055ef398de1a@ec2-54-75-26-218.eu-west-1.compute.amazonaws.com:5432/de176gevbt1ads', echo=False)
+engine = create_engine('sqlite:///testicle.sqlite', echo=False)
+# engine = create_engine('postgresql://eqqawghmzbrspv:8d24308bbef2127c5c9d9ae3fdae507569f788ad6a60c4a619dd055ef398de1a@ec2-54-75-26-218.eu-west-1.compute.amazonaws.com:5432/de176gevbt1ads', echo=False)
 metadata = db_models.Base.metadata
 metadata.create_all(engine)
 Session = sessionmaker()
@@ -21,25 +21,19 @@ def get_gods_db():
 
 def get_god_names_db():
     statement = select(metadata.tables["Gods"].c.name)
-    return execute(statement)
+    return fetch(statement)
 
 
 def get_players_db():
-    session = Session(bind=engine)
-    player_data = session.query(db_models.Players)
-    session.close()
-    return player_data
+    statement = select(metadata.tables["Players"])
+    result = fetch(statement)
+    print(result)
+    return result
 
 
 def get_player_names_db():
     statement = select(metadata.tables["Players"].c.name)
-    return execute(statement)
-
-
-def get_data(table):
-    # return all columns
-    session = Session(bind=engine)
-    return session.query(table).all()
+    return fetch(statement)
 
 
 def get_data_many(tablenames):
@@ -72,11 +66,17 @@ def get_table(tablename):
 
 def gods_in_table(table):
     statement = select(table.c.god)
-    return execute(statement)
+    return fetch(statement)
 
 
-def execute(statement):
+def fetch(statement):
     connection = engine.connect()
     result = engine.execute(statement)
     connection.close()
     return result.all()
+
+
+def execute(statement):
+    connection = engine.connect()
+    engine.execute(statement)
+    connection.close()

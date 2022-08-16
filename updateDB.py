@@ -1,10 +1,13 @@
+from sqlalchemy import select
 from apihandler import getSessionID, getmatchhistory
-from database_handler import get_players_db, get_table, get_data, execute
+from database_handler import get_players_db, get_table, execute, fetch
 
 
 def updateDB(enabled_players, modes):
     session_id, session_start_timestamp, session_start_time = getSessionID()
-    players = get_players_db()
+    players = []
+    for player_tuple in get_players_db():
+        players.append(player_tuple)
     for player in players:
         player_id = player.player_id
         player_name = player.name
@@ -12,7 +15,7 @@ def updateDB(enabled_players, modes):
             print("Skipping " + player_name + " because it's not in the list of "
                                               "enabled players.")
             continue
-        print("Updating " + player_name)
+        print("Updating " + player_name + ", " + player_id)
         recent = getmatchhistory(player_id, session_id)
 
         for match in recent:
@@ -39,7 +42,9 @@ def updateDB(enabled_players, modes):
             selfhealing = match["Healing_Player_Self"]
             tablename = player_name + "_" + mode
             table = get_table(tablename)
-            top = get_data(table).filter_by(god=god)
+            statement = select(table).where(table.c.god == god)
+            top = fetch(statement)
+            print(top)
             if len(top) > 0:
                 top = top[0]
             else:
@@ -59,3 +64,4 @@ def updateDB(enabled_players, modes):
                 execute(table.update().where(table.c.god == god).values(healing=healing))
             if selfhealing > top[6]:
                 execute(table.update().where(table.c.god == god).values(selfhealing=selfhealing))
+            print("match processed")
