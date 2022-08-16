@@ -92,14 +92,10 @@ def createtables():
             gods_in_table = []
             for tuple in database_handler.gods_in_table(table):
                 gods_in_table.append(tuple[0])
-            print("********************")
-            print(gods_in_table)
-            print("--------------------")
             for god in gods_in_db:
                 if god in gods_in_table:
                     continue
                 else:
-                    print("Adding " + god + " to " + table.name)
                     values.append({"god": god})
             if len(values) > 0:
                 database_handler.insert_into(table, values)
@@ -156,12 +152,19 @@ def scores():
             role = "Mage"
         gods.append(god)
         roles[god] = role
+    tablenames = []
     for mode in modes:
         data[mode] = {}
         for player in enabled_players:
             tablename = player + "_" + mode
-            res = database_handler.get_data(database_handler.get_table(tablename))
-            data[mode][player] = res
+            tablenames.append(tablename)
+            # res = database_handler.get_data(database_handler.get_table(tablename))
+            # data[mode][player] = res
+        print("1st")
+    all_data = database_handler.get_data_many(tablenames)
+    for mode in modes:
+        for player in enabled_players:
+            data[mode][player] = all_data[player + "_" + mode]
     for mode in modes:
         damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
         rows = {
@@ -179,6 +182,7 @@ def scores():
                     entry.append(data[mode][player][j][i + 1])
                 rows[columns[i]].append(entry)
         tables[mode] = rows
+        print("2nd")
     return render_template("scores.html", tableheaders=enabled_players, gods=gods, roles=roles, tables=tables, len=len)
 
 

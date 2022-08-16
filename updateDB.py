@@ -39,7 +39,7 @@ def updateDB(enabled_players, modes):
             selfhealing = match["Healing_Player_Self"]
             tablename = player_name + "_" + mode
             table = get_table(tablename)
-            top = get_data(table).filter_by(god=god).all()
+            top = get_data(table).filter_by(god=god)
             if len(top) > 0:
                 top = top[0]
             else:
