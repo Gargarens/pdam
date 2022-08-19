@@ -28,7 +28,7 @@ session_start_time = datetime.datetime.utcnow()
 
 
 def updateTask():
-    # updateDB(enabled_players, modes)
+    updateDB(enabled_players, modes)
     print("updated")
 
 
@@ -159,9 +159,12 @@ def scores():
             tablename = player + "_" + mode
             tablenames.append(tablename)
     all_data = database_handler.get_data_many(tablenames)
+    print(all_data["Spuik_435"])
+    print("**************************")
     for mode in modes:
         for player in enabled_players:
             data[mode][player] = all_data[player + "_" + mode]
+    print(data["435"]["Spuik"])
     for mode in modes:
         damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
         rows = {

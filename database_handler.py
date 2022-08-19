@@ -3,8 +3,9 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import sessionmaker
 import db_models
 
-engine = create_engine('sqlite:///testicle.sqlite', echo=False)
-# engine = create_engine('postgresql://eqqawghmzbrspv:8d24308bbef2127c5c9d9ae3fdae507569f788ad6a60c4a619dd055ef398de1a@ec2-54-75-26-218.eu-west-1.compute.amazonaws.com:5432/de176gevbt1ads', echo=False)
+# engine = create_engine('sqlite:///testicle.sqlite', echo=False)
+# engine = create_engine('postgresql://postgres:p@localhost/masticle', echo=False)
+engine = create_engine('postgresql://eqqawghmzbrspv:8d24308bbef2127c5c9d9ae3fdae507569f788ad6a60c4a619dd055ef398de1a@ec2-54-75-26-218.eu-west-1.compute.amazonaws.com:5432/de176gevbt1ads', echo=False)
 metadata = db_models.Base.metadata
 metadata.create_all(engine)
 Session = sessionmaker()
@@ -40,7 +41,7 @@ def get_data_many(tablenames):
     session = Session(bind=engine)
     result = {}
     for tablename in tablenames:
-        result[tablename] = session.query(metadata.tables[tablename]).all()
+        result[tablename] = session.query(metadata.tables[tablename]).order_by("god").all()
     session.close()
     return result
 
