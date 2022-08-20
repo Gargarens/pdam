@@ -7,6 +7,11 @@ from updateDB import updateDB
 import database_handler
 
 
+def updateTask():
+    updateDB(enabled_players, modes)
+    print("updated")
+
+
 def register_extensions(application):
     from database_handler import db
     db.init_app(application)
@@ -32,7 +37,7 @@ def updateTask():
     print("updated")
 
 
-scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=600)
+scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=120)
 scheduler.start()
 
 
@@ -159,12 +164,9 @@ def scores():
             tablename = player + "_" + mode
             tablenames.append(tablename)
     all_data = database_handler.get_data_many(tablenames)
-    print(all_data["Spuik_435"])
-    print("**************************")
     for mode in modes:
         for player in enabled_players:
             data[mode][player] = all_data[player + "_" + mode]
-    print(data["435"]["Spuik"])
     for mode in modes:
         damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
         rows = {

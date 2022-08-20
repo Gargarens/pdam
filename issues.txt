@@ -1,0 +1,8 @@
+score table row background color doesn't work when filtering for classes
+
+auto-update doesn't happen unless someone has the site open
+
+------------
+feature TODO
+an extra display showing max value of each player
+    like a small box that shows which god has the highest damage for the chosen filter and how much it is
