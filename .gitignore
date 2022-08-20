@@ -1,1 +1,4 @@
 /.venv/
+pdam.json
+pdam.sqlite
+testicle.sqlite
