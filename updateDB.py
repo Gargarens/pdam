@@ -1,19 +1,21 @@
-from databasehandler import runsql, getplayersdb, fetchsql
+from sqlalchemy import select
 from apihandler import getSessionID, getmatchhistory
+from database_handler import get_players_db, get_table, execute, fetch
 
 
-def updateDB(enabled_players, mode_keys):
+def updateDB(enabled_players, modes):
     session_id, session_start_timestamp, session_start_time = getSessionID()
-    players = getplayersdb()
-    verbose = False
+    players = []
+    for player_tuple in get_players_db():
+        players.append(player_tuple)
     for player in players:
-        player_id = player[0]
-        player_name = player[1]
+        player_id = player.player_id
+        player_name = player.name
         if player_name not in enabled_players:
             print("Skipping " + player_name + " because it's not in the list of "
-                  "enabled players.")
+                                              "enabled players.")
             continue
-        # print("Updating " + player_name)
+        print("Updating " + player_name + ", " + player_id)
         recent = getmatchhistory(player_id, session_id)
 
         for match in recent:
@@ -26,12 +28,11 @@ def updateDB(enabled_players, mode_keys):
                 print("Error for player " + player_name)
                 go = False
             if god == "ChangE":
-                god = "Chang''e"
-            # print("God: " + god)
+                god = "Chang'e"
             if not go:
                 continue
             mode = str(match["Match_Queue_Id"])
-            if mode not in mode_keys:
+            if mode not in modes.keys():
                 continue
             damage = match["Damage"]
             mitigated = match["Damage_Mitigated"]
@@ -39,42 +40,28 @@ def updateDB(enabled_players, mode_keys):
             assists = match["Assists"]
             healing = match["Healing"]
             selfhealing = match["Healing_Player_Self"]
-            table = player_name + "_" + mode
-            sql = "SELECT * FROM " + table + " WHERE god = '" + god + "'"
-            tabledata = fetchsql(sql)
-            if len(tabledata) > 0:
-                top = tabledata[0]
+            tablename = player_name + "_" + mode
+            table = get_table(tablename)
+            statement = select(table).where(table.c.god == god)
+            top = fetch(statement)
+            print(top)
+            if len(top) > 0:
+                top = top[0]
             else:
                 print("NOTHING IN DB-------------\nGod: " + god)
                 continue
+
             # (0:GOD, 1:DMG, 2:MIT, 3:KILL, 4:ASSIST, 5:HEAL, 6:SELF HEAL)
             if damage > top[1]:
-                sql = "UPDATE " + table + " SET damage = " + str(damage) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New damage PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                execute(table.update().where(table.c.god == god).values(damage=damage))
             if mitigated > top[2]:
-                sql = "UPDATE " + table + " SET mitigated = " + str(mitigated) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New mitigated PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                execute(table.update().where(table.c.god == god).values(mitigated=mitigated))
             if kills > top[3]:
-                sql = "UPDATE " + table + " SET kills = " + str(kills) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New kills PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                execute(table.update().where(table.c.god == god).values(kills=kills))
             if assists > top[4]:
-                sql = "UPDATE " + table + " SET assists = " + str(assists) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New assists PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                execute(table.update().where(table.c.god == god).values(assists=assists))
             if healing > top[5]:
-                sql = "UPDATE " + table + " SET healing = " + str(healing) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New healing PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                execute(table.update().where(table.c.god == god).values(healing=healing))
             if selfhealing > top[6]:
-                sql = "UPDATE " + table + " SET selfhealing = " + str(selfhealing) + " WHERE god='" + god + "'"
-                if verbose:
-                    print("New selfhealing PR for " + player_name + "(" + god + ")")
-                runsql(sql)
+                execute(table.update().where(table.c.god == god).values(selfhealing=selfhealing))
+            print("match processed")

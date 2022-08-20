@@ -1,37 +1,43 @@
-from databasehandler import *
 from apihandler import *
 from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
+from db_models import modes, enabled_players, enabled_players_id
+from config import Config
 from updateDB import updateDB
+import database_handler
 
-app = Flask(__name__)
+
+def updateTask():
+    updateDB(enabled_players, modes)
+    print("updated")
+
+
+def register_extensions(application):
+    from database_handler import db
+    db.init_app(application)
+
+
+def create_app():
+    application = Flask(__name__)
+    application.config.from_object(Config)
+    register_extensions(application)
+    return application
+
+
+app = create_app()
 app.secret_key = "cockandballs"
 scheduler = APScheduler()
 time_since_start = 0
 session_id = 0
 session_start_time = datetime.datetime.utcnow()
-mode_keys = ["426", "435", "448", "445", "10195", "451", "10193", "10197", "450", "10189", "440"]
-enabled_players = ["creviceguy", "Spuik", "MeatEater04"]
-modes = {
-    "426":   "Conquest",
-    "435":   "Arena",
-    "448":   "Joust",
-    "445":   "Assault",
-    "10195": "Under 30 Arena",
-    "451":   "Conquest Ranked",
-    "10193": "Under 30 Conquest",
-    "10197": "Under 30 Joust",
-    "450":   "Joust Ranked",
-    "10189": "Slash",
-    "440":   "Duel Ranked"
-}
 
 
 def updateTask():
-    updateDB(enabled_players, mode_keys)
+    updateDB(enabled_players, modes)
+    print("updated")
 
 
-scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=600)
+scheduler.add_job(id="update-db", func=updateTask, trigger="interval", seconds=120)
 scheduler.start()
 
 
@@ -42,28 +48,63 @@ def index():
 
 @app.route("/createtables", methods=["POST", "GET"])
 def createtables():
-    # ALL COMMENTED OUT TO NOT FUCK UP THE DATABASE
-    # players = getplayersdb()
-    # columns = ["god TEXT PRIMARY KEY", "damage INTEGER DEFAULT (0)", "mitigated INTEGER DEFAULT (0)",
-    #            "kills INTEGER DEFAULT (0)", "assists INTEGER DEFAULT (0)", "healing INTEGER DEFAULT (0)",
-    #            "selfhealing INTEGER DEFAULT (0)"]
-    # godsfromdb = getgodsdb()
-    # gods = []
-    # rows = []
-    # for tuple in godsfromdb:
-    #     gods.append(tuple[0])
-    # for god in gods:
-    #     values = (god, 0, 0, 0, 0, 0, 0)
-    #     rows.append(values)
-    # for player in players:
-    #     name = player[1]
-    #     for table in modes:
-    #         tablename = name + "_" + table
-    #         createtable(tablename, columns)
-    #         sql = "INSERT INTO " + tablename + " values (?, ?, ?, ?, ?, ?, ?)"
-    #         sqlexecutemany(sql, rows)
-    # flash("Add new gods manually")
+    god_data_API = getgods(session_id)
+    gods_in_db = []
+    for tuple in database_handler.get_god_names_db():
+        gods_in_db.append(tuple[0])
+    print("retrieved gods from API")
+    gods_to_add = []
+    for entry in god_data_API:
+        if entry["Name"] in gods_in_db:
+            print(entry["Name"] + " already in database, skipping")
+            continue
+        else:
+            # god = Gods(entry["Name"], entry["Roles"], entry["Pantheon"])
+            god = {"name": entry["Name"], "role": entry["Roles"], "pantheon": entry["Pantheon"]}
+            gods_to_add.append(god)
+    if len(gods_to_add) > 0:
+        god_table = database_handler.get_table("Gods")
+        database_handler.insert_into(god_table, gods_to_add)
+    print("inserted " + str(len(gods_to_add)) + " gods into table Gods")
 
+    players_in_db = []
+    for player_tuple in database_handler.get_player_names_db():
+        players_in_db.append(player_tuple[0])
+    players_to_add = []
+    for pid, name in zip(enabled_players_id, enabled_players):
+        if name in players_in_db:
+            print(name + " already in database, skipping")
+            continue
+        else:
+            # player = Players(pid, name)
+            player = {"player_id": pid, "name": name}
+            players_to_add.append(player)
+    if len(players_to_add) > 0:  # Trying to add nothing fails NOT NULL constraint
+        player_table = database_handler.get_table("Players")
+        database_handler.insert_into(player_table, players_to_add)
+    print("inserted " + str(len(players_to_add)) + " players into Players")
+
+    gods_in_db = []
+    for god_tuple in database_handler.get_god_names_db():
+        gods_in_db.append(god_tuple[0])
+    for table in database_handler.get_tables():
+        if table.name == "Gods" or table.name == "Players":
+            print("Found " + table.name)
+            continue
+        else:
+            # Build a list of rows and insert all at once, instead of inserting one by one. For SQL performance
+            values = []
+            gods_in_table = []
+            for tuple in database_handler.gods_in_table(table):
+                gods_in_table.append(tuple[0])
+            for god in gods_in_db:
+                if god in gods_in_table:
+                    continue
+                else:
+                    values.append({"god": god})
+            if len(values) > 0:
+                database_handler.insert_into(table, values)
+        print(table.name + " processed.")
     return render_template("createtables.html")
 
 
@@ -84,34 +125,21 @@ def check():
     time_since_start = datetimenow() - session_start_time
     datausedcheck = checkdatause(session_id)[0]
 
-    requestsLeft = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
-    flash("Requests left: " + str(requestsLeft))
+    requests_left = datausedcheck['Request_Limit_Daily'] - datausedcheck['Total_Requests_Today']
+    flash("Requests left: " + str(requests_left))
 
-    activeSessions = datausedcheck['Active_Sessions']
-    flash("Active sessions: " + str(activeSessions))
+    active_sessions = datausedcheck['Active_Sessions']
+    flash("Active sessions: " + str(active_sessions))
 
-    sessionsLeft = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
-    flash("Sessions left: " + str(sessionsLeft))
+    sessions_left = datausedcheck['Session_Cap'] - datausedcheck['Total_Sessions_Today']
+    flash("Sessions left: " + str(sessions_left))
 
     return render_template("check.html")
 
 
-@app.route("/gods", methods=["POST", "GET"])
-def gods():
-    global session_id
-    global session_start_time
-    god_data = getgods(session_id)
-    dbdata = []
-    for god in god_data:
-        dbdata.append((god["Name"], god["Roles"], god["Pantheon"]))
-    insertintotable(dbdata, "gods")
-
-    return render_template("gods.html")
-
-
 @app.route("/update", methods=["POST", "GET"])
 def update():
-    updateDB(enabled_players, mode_keys)
+    updateDB(enabled_players, modes)
     return render_template("update.html")
 
 
@@ -122,20 +150,23 @@ def scores():
     tables = {}
     gods = []
     roles = {}
-    for godtuple in getgodsdb():
-        god = godtuple[0]
-        role = godtuple[1]
-        if role == "Mage, Ranged": # Fix bug in API with Persephone role
+    for god_entry in database_handler.get_gods_db():
+        god = god_entry.name
+        role = god_entry.role
+        if role == "Mage, Ranged":  # Fix bug in API with Persephone role
             role = "Mage"
         gods.append(god)
         roles[god] = role
+    tablenames = []
     for mode in modes:
         data[mode] = {}
         for player in enabled_players:
-            table = player + "_" + mode
-            res = getdata(table)
-            data[mode][player] = res
-
+            tablename = player + "_" + mode
+            tablenames.append(tablename)
+    all_data = database_handler.get_data_many(tablenames)
+    for mode in modes:
+        for player in enabled_players:
+            data[mode][player] = all_data[player + "_" + mode]
     for mode in modes:
         damage, mitigated, kills, assists, healing, selfhealing = [], [], [], [], [], []
         rows = {
@@ -150,11 +181,12 @@ def scores():
             for i in range(len(columns)):
                 entry = []
                 for player in enabled_players:
-                    entry.append(data[mode][player][j][i+1])
+                    entry.append(data[mode][player][j][i + 1])
                 rows[columns[i]].append(entry)
         tables[mode] = rows
     return render_template("scores.html", tableheaders=enabled_players, gods=gods, roles=roles, tables=tables, len=len)
 
 
-if __name__ == "__main__":
-    app.run()
+# if __name__ == "__main__":
+#     app.run(port=1234, debug=True, use_reloader=False)
+
