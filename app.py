@@ -1,7 +1,7 @@
 from apihandler import *
 from flask import Flask, render_template, flash
 from flask_apscheduler import APScheduler
-from db_models import Gods, Players, modes, enabled_players, enabled_players_id
+from db_models import modes, enabled_players, enabled_players_id
 from config import Config
 from updateDB import updateDB
 import database_handler
