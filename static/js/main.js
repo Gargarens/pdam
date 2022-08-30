@@ -77,12 +77,12 @@ function generateTable() {
             trs[row].style.display = "table-row";
             if (i % 3 == 2) {
                 biggest = i;
-                if (tds[i-1].innerHTML > tds[i].innerHTML) {
+                if (Number(tds[i-1].innerHTML) > Number(tds[i].innerHTML)) {
                     biggest = i-1;
-                    if (tds[i-2].innerHTML > tds[i-1].innerHTML) {
+                    if (Number(tds[i-2].innerHTML) > Number(tds[i-1].innerHTML)) {
                         biggest = i-2;
                     }
-                } else if (tds[i-2].innerHTML > tds[i].innerHTML) {
+                } else if (Number(tds[i-2].innerHTML) > Number(tds[i].innerHTML)) {
                     biggest = i-2;
                 }
                 if (tds[biggest].innerHTML != 0) {
