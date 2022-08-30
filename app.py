@@ -7,11 +7,6 @@ from updateDB import updateDB
 import database_handler
 
 
-def updateTask():
-    updateDB(enabled_players, modes)
-    print("updated")
-
-
 def register_extensions(application):
     from database_handler import db
     db.init_app(application)
@@ -33,7 +28,7 @@ session_start_time = datetime.datetime.utcnow()
 
 
 def updateTask():
-    updateDB(enabled_players, modes)
+    # updateDB(enabled_players, modes)
     print("updated")
 
 

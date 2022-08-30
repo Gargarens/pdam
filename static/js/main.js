@@ -67,6 +67,7 @@ function generateTable() {
     values = allTables[selectedMode][selectedColumn].flat();
     reigns = {}
     players.forEach(player => reigns[player] = 0);
+    var displayedRowCount = 0;
     for (let i = 0; i < tds.length; i++) {
         var row = Math.floor(i/3);
         tds[i].style.fontWeight = "normal";
@@ -75,6 +76,14 @@ function generateTable() {
             trs[row].style.display = "none";
         } else {
             trs[row].style.display = "table-row";
+            if (i % 3 == 0) {
+                displayedRowCount++;
+                if (displayedRowCount % 2 == 0) {
+                    trs[row].style.background = "#21262d";
+                } else {
+                    trs[row].style.background = "#161b22";
+                }
+            }
             if (i % 3 == 2) {
                 biggest = i;
                 if (Number(tds[i-1].innerHTML) > Number(tds[i].innerHTML)) {
