@@ -1,7 +1,5 @@
 score table row background color doesn't work when filtering for classes
 
-auto-update doesn't happen unless someone has the site open
-
 ------------
 feature TODO
 an extra display showing max value of each player
